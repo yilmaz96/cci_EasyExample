@@ -24,6 +24,7 @@ extern "C" {
 
 
 void VTC_setNewVT(iso_u8 u8Instance);
+void VTC_setPoolReady(iso_u8 u8Instance);
 void VTC_setPoolManipulation(iso_u8 u8Instance);
 
 void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData);

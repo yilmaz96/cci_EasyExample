@@ -147,7 +147,7 @@ static void CbVtConnCtrl(const ISOVT_EVENT_DATA_T* psEvData)
       break;
    case IsoEvMaskActivated:
       /* pool is ready - here we can setup the initial mask and data which should be displayed */
-
+	  VTC_setPoolReady(psEvData->u8Instance);
       break;
    case IsoEvMaskTick:  // Cyclic event; Called only after successful login
       AppVTClientDoProcess();   // Sending of commands etc. for mask instance

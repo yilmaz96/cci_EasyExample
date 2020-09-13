@@ -24,16 +24,8 @@
 #include "App_VTClientLev2.h"   // -> Object defines
 
 #include "MyProject1.iop.h"
+#include "Settings/settings.h"
 
-void VTC_setNewVT(iso_u8 u8Instance)
-{
-   // ------------------------------------------------------------------------------
-
-   PARAM_UNUSED(u8Instance);
-
-
-   // ------------------------------------------------------------------------------
-}
 
 // called from AppPoolSettings()
 void VTC_setPoolManipulation(iso_u8 u8Instance)
@@ -105,7 +97,27 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	}
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
+	setU32("CF-A", "Tageszaehler", Tageszaehler);
+	setU32("CF-A", "Gesamtzaehler", Gesamtzaehler);
+}
 
+
+void VTC_setNewVT(iso_u8 u8Instance)
+{
+   // ------------------------------------------------------------------------------
+
+   PARAM_UNUSED(u8Instance);
+
+
+   // ------------------------------------------------------------------------------
+}
+
+void VTC_setPoolReady(iso_u8 u8Instance)
+{
+	Tageszaehler = getU32("CF-A", "Tageszaehler", 0);
+	Gesamtzaehler = getU32("CF-A", "Gesamtzaehler", 0);
+	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
+	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
 }
 
 
