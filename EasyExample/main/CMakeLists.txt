@@ -26,6 +26,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
   "../AppIso"
   "../AppCommon"
   "../Settings"
+  "../ISODesigner/MyWorkspace1/MyProject1/Output"
 )
 
 
