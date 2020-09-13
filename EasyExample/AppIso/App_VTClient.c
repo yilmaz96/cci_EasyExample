@@ -26,6 +26,10 @@
 
 #include "App_VTClient.h"
 #include "App_VTClientLev2.h"
+
+#include "MyProject1.iop.h"
+
+
 #if defined(linux)
 #include "pools/pool.iop.h"
 #endif // defined(linux)
@@ -188,9 +192,9 @@ static void AppVTClientDoProcess( void )
 
 
 #if defined(ESP_PLATFORM)
-static const char *POOL_FILENAME = "/spiffs/pools/pool.iop";
+static const char *POOL_FILENAME = "/spiffs/pools/MyProject1.iop";
 #else
-static const char *POOL_FILENAME = "pools/pool.iop";
+static const char *POOL_FILENAME = "pools/MyProject1.iop";
 #endif // defined(ESP_PLATFORM)
 
 
@@ -218,7 +222,7 @@ static void AppPoolSettings( iso_u8 u8Instance )
 
 	   (void)IsoVtcPoolInit( u8Instance, au8Version1, pu8PoolData, 0,       // Instance, Version, PoolAddress, ( PoolSize not needed ) 
 		                   u16NumberObjects, colour_256,     // Number of objects, Graphic typ, 
-                         60, 32, 200  );                   // SKM width and height, DM res.
+						   ISO_DESIGNATOR_WIDTH, ISO_DESIGNATOR_HEIGHT, ISO_MASK_SIZE  );                   // SKM width and height, DM res.
    }
 
    // Set pool manipulations
@@ -444,13 +448,10 @@ iso_s16 VTC_PoolReload(void)
    {
       iso_u16 wSKM_Scal = 0u;
       /* Reload ranges */
-      IsoVtcPoolSetIDRangeMode(u8_CfVtInstance, 0, 1099, 0, NotLoad);
-      IsoVtcPoolSetIDRangeMode(u8_CfVtInstance, 1100, 1100, 1002, LoadMoveID);  /* 1002 = target(start)ID */
-      IsoVtcPoolSetIDRangeMode(u8_CfVtInstance, 1101, 39999, 0, NotLoad);
-      IsoVtcPoolSetIDRangeMode(u8_CfVtInstance, 42001, 65334, 0, NotLoad);
+
       /* Manipulating these objects */
       wSKM_Scal = (iso_u16)IsoVtcPoolReadInfo(u8_CfVtInstance, PoolSoftKeyMaskScalFaktor);
-      IsoVtcPoolSetIDRangeMode(u8_CfVtInstance, 40012, 40012, wSKM_Scal, Centering);  /* Auxiliary function */
+
    }
    else
    {

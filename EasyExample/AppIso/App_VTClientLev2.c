@@ -50,16 +50,19 @@ void VTC_setPoolManipulation(iso_u8 u8Instance)
 
    // ------------------------------------------------------------------------------
 
-   // Objects to be reloaded
-   IsoVtcPoolSetIDRangeMode(u8Instance, 1100u,  1100u, 0u, NotLoad);
-   IsoVtcPoolSetIDRangeMode(u8Instance, 40000u, 42000u, 0u, NotLoad);
-   IsoVtcPoolSetIDRangeMode(u8Instance, 35000u, 35000u, 0u, NotLoad);
 
    IsoVtcPoolSetIDRangeMode(u8Instance, 0u,     0u, u16SKM_Scal, Centering);  // Working set object
    IsoVtcPoolSetIDRangeMode(u8Instance, 20000u, 20000u, u16SKM_Scal, Scaling);    // Working set designator
    IsoVtcPoolSetIDRangeMode(u8Instance, 29000u, 29099u, u16SKM_Scal, Centering);  // Auxiliary function
    IsoVtcPoolSetIDRangeMode(u8Instance, 20900u, 20999u, u16SKM_Scal, Scaling);    // Auxiliary bitmaps
    (void)u16DM_Scal;
+
+
+	if (IsoVtcGetStatusInfo(u8Instance, VT_VERSIONNR) == VT_V2_FE)
+	{
+		// Transforming Auxiliary function Type 2 into Type 1
+		IsoVtcPoolSetIDRangeMode(u8Instance, 29000, 29999, 0, AuxToV2);
+	}
 }
 
 void VTC_handleSoftkeys(const ISOVT_MSG_STA_T * pIsoMsgSta)

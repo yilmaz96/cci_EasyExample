@@ -26,11 +26,20 @@ set(COMPONENT_ADD_INCLUDEDIRS
   "../AppIso"
   "../AppCommon"
   "../Settings"
+  "../ISODesigner/MyWorkspace1/MyProject1/Output"
 )
 
 
 register_component()
-  
+
+
+
+# After build, copy the archive file and header file to parent example directory's main component
+add_custom_command(TARGET ${COMPONENT_LIB}
+                  POST_BUILD
+                  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/ISODesigner/MyWorkspace1/MyProject1/Output/MyProject1.iop ${CMAKE_SOURCE_DIR}/spiffs_image/pools
+                  COMMENT "Copying MyProject1.iop to spiffs_image...")
+
   
 # Import the library, specifying a target name and the library path.
 # The private dependencies of the library is also specified.
