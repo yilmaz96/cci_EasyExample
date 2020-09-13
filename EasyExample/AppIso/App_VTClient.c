@@ -188,9 +188,9 @@ static void AppVTClientDoProcess( void )
 
 
 #if defined(ESP_PLATFORM)
-static const char *POOL_FILENAME = "/spiffs/pools/pool.iop";
+static const char *POOL_FILENAME = "/spiffs/pools/MyProject1.iop";
 #else
-static const char *POOL_FILENAME = "pools/pool.iop";
+static const char *POOL_FILENAME = "pools/MyProject1.iop";
 #endif // defined(ESP_PLATFORM)
 
 
