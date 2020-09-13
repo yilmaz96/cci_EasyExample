@@ -97,6 +97,13 @@ public :
 
 } s_settings;
 
+
+
+void Settings_init(void)
+{
+
+}
+
 uint32_t GetPrivateProfileStringA(
     const char* section,
     const char* lpKeyName,

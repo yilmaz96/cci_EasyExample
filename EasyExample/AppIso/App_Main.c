@@ -24,6 +24,7 @@
 
 
 #include "AppCommon/AppOutput.h"
+#include "Settings/settings.h"
 #include "App_VTClient.h"  /* needed only for DoKeyBoard() */
 //#include "App_TCClient.h"  /* needed only for DoKeyBoard() */
 
@@ -68,6 +69,7 @@ void app_main(void)
 {
    hw_DebugPrint("ISO Application starts \n");
    /* Initialize application */
+   Settings_init();
    AppHW_Init();
 
 #if defined(APP_TEST_CAN_DRIVER)
