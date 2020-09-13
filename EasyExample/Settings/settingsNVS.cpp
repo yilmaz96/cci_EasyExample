@@ -16,6 +16,8 @@
 #include "nvs_flash.h"
 #include "nvs.h"
 #include "nvs_handle.hpp"
+#include "esp_log.h"
+
 
 #if 1
 #define vswprintf_s swprintf
@@ -31,6 +33,11 @@
 
 static const char FILENAME[] = ".\\settings.ini";
 #define MAXSTRLEN      1024U
+
+static const char TAG[] = "settings";
+
+
+
 static class Settings 
 {
 private:
@@ -135,7 +142,12 @@ public :
     uint64_t getX64(const char section[], const char key[], const uint64_t defaultValue)
     {
     	uint64_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	this->setX64(section, key, defaultValue);
+            return defaultValue;
+        }
     	return value;
     }
 
@@ -196,7 +208,11 @@ public :
 
     void setX64(const char section[], const char key[], const uint64_t value)
     {
+        ESP_LOGI(TAG, "setX64, section = %s, key = %s, value = %llX", section, key, value);
     	my_handle->set_item(key, value);
+		printf("Committing updates in NVS ... ");
+		esp_err_t err = my_handle->commit();
+		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setString(const char section[], const char key[], const char value[])
