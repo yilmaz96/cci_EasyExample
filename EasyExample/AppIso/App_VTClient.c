@@ -25,6 +25,7 @@
 #include "AppCommon/AppOutput.h"
 
 #include "App_VTClient.h"
+#include "VIEngine.h"
 #include "App_VTClientLev2.h"
 
 #include "MyProject1.iop.h"
@@ -52,7 +53,6 @@ static void CbAuxPrefAssignment (VT_AUXAPP_T asAuxAss[], iso_s16* ps16MaxNumberO
 static void AppPoolSettings     (iso_u8 u8Instance);
 static void AppVTClientDoProcess(void);
 
-static void VTC_SetObjValuesBeforeStore(iso_u8 u8Instance);
 
 /* ************************************************************************ */
 void AppVTClientLogin(iso_s16 s16CfHandle)
@@ -144,7 +144,6 @@ static void CbVtConnCtrl(const ISOVT_EVENT_DATA_T* psEvData)
       break;
    case IsoEvMaskReadyToStore:
       /* pool upload finished - here we can change objects values which should be stored */
-      VTC_SetObjValuesBeforeStore(psEvData->u8Instance);
       break;
    case IsoEvMaskActivated:
       /* pool is ready - here we can setup the initial mask and data which should be displayed */
@@ -236,15 +235,10 @@ static void CbVtStatus(const ISOVT_STATUS_DATA_T* psStatusData)
 {
    switch (psStatusData->wPage)
    {
-   case DM_PAGE1:
+   case DataMask_Home:
       //IsoDeleteVersion((iso_u8*)"WHEPS18");    // Avoid deleting pool after each test
       break;
-   case DM_PAGE2:
-      VTC_setPage2();         // Sending strings ...
-      break;
-    case DM_PAGE3:
-      //IsoCmd_NumericValue( 27010, 20820 ); // Show copied picture
-      break;
+
    default:
        break;
    }
@@ -331,8 +325,9 @@ static void CbVtMessages( const ISOVT_MSG_STA_T * pIsoMsgSta )
 
    switch ( pIsoMsgSta->iVtFunction )
    {
+   case button_activation :
    case softkey_activation :
-      VTC_handleSoftkeys(pIsoMsgSta);
+      VTC_handleSoftkeysAndButtons((struct ButtonActivation_S *)(pIsoMsgSta));
       break;
    case VT_change_numeric_value :
       break;
@@ -385,16 +380,6 @@ static void CbVtMessages( const ISOVT_MSG_STA_T * pIsoMsgSta )
    }
 }
 
-static void VTC_SetObjValuesBeforeStore(iso_u8 u8Instance)
-{
-   iso_u8 au8L1[] = "WHEPS                 ";
-   iso_u8 au8L2[] = "p.wegscheider@wheps.de";
-   iso_u8 au8L3[] = "e.hammerl@wheps.de    ";
-
-   IsoVtcCmd_StringRef(u8Instance, OUTSTR_L1, au8L1);
-   IsoVtcCmd_StringRef(u8Instance, OUTSTR_L2, au8L2);
-   IsoVtcCmd_StringRef(u8Instance, OUTSTR_L3, au8L3);
-}
 
 /* ************************************************************************ */
 // Delete stored pool
@@ -446,11 +431,11 @@ iso_s16 VTC_PoolReload(void)
    u16NumberObjects = IsoGetNumofPoolObjs(pu8PoolData, (iso_s32)u32PoolSize);
    if (IsoVtcPoolReload(u8_CfVtInstance, pu8PoolData, u16NumberObjects))
    {
-      iso_u16 wSKM_Scal = 0u;
+      //iso_u16 wSKM_Scal = 0u;
       /* Reload ranges */
 
       /* Manipulating these objects */
-      wSKM_Scal = (iso_u16)IsoVtcPoolReadInfo(u8_CfVtInstance, PoolSoftKeyMaskScalFaktor);
+      //wSKM_Scal = (iso_u16)IsoVtcPoolReadInfo(u8_CfVtInstance, PoolSoftKeyMaskScalFaktor);
 
    }
    else
