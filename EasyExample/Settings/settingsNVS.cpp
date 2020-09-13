@@ -31,9 +31,6 @@
 
 /* ************************************************************************ */
 
-static const char FILENAME[] = ".\\settings.ini";
-#define MAXSTRLEN      1024U
-
 static const char TAG[] = "settings";
 
 
@@ -81,21 +78,39 @@ public :
     int8_t getS8(const char section[], const char key[], const int8_t defaultValue)
     {
     	int8_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setS8(section, key, value);
+        }
+        ESP_LOGI(TAG, "setS8, section = %s, key = %s, value = %i", section, key, value);
     	return value;
     }
 
     int16_t getS16(const char section[], const char key[], const int16_t defaultValue)
     {
     	int16_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setS16(section, key, value);
+        }
+        ESP_LOGI(TAG, "getS16, section = %s, key = %s, value = %i", section, key, value);
     	return value;
     }
 
     int32_t getS32(const char section[], const char key[], const int32_t defaultValue)
     {
     	int32_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setS32(section, key, value);
+        }
+        ESP_LOGI(TAG, "getS32, section = %s, key = %s, value = %i", section, key, value);
     	return value;
     }
 
@@ -105,37 +120,62 @@ public :
     	esp_err_t error = my_handle->get_item(key, value);
         if (error != ESP_OK)
         {
-        	my_handle->set_item(key, defaultValue);
-            return defaultValue;
+        	value = defaultValue;
+        	this->setS64(section, key, value);
         }
+        ESP_LOGI(TAG, "getS64, section = %s, key = %s, value = %lli", section, key, value);
     	return value;
     }
 
     uint8_t getU8(const char section[], const char key[], const uint8_t defaultValue)
     {
     	uint8_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setU8(section, key, value);
+        }
+        ESP_LOGI(TAG, "getU8, section = %s, key = %s, value = %u", section, key, value);
     	return value;
     }
 
     uint16_t getU16(const char section[], const char key[], const uint16_t defaultValue)
     {
     	uint16_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setU16(section, key, value);
+        }
+        ESP_LOGI(TAG, "getU16, section = %s, key = %s, value = %u", section, key, value);
     	return value;
     }
 
     uint32_t getU32(const char section[], const char key[], const uint32_t defaultValue)
     {
     	uint32_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setU32(section, key, value);
+        }
+        ESP_LOGI(TAG, "getU32, section = %s, key = %s, value = %u", section, key, value);
     	return value;
     }
 
     uint64_t getU64(const char section[], const char key[], const uint64_t defaultValue)
     {
     	uint64_t value;
-    	my_handle->get_item(key, value);
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	value = defaultValue;
+        	this->setU64(section, key, value);
+        }
+        ESP_LOGI(TAG, "getU64, section = %s, key = %s, value = %llu", section, key, value);
     	return value;
     }
 
@@ -145,16 +185,22 @@ public :
     	esp_err_t error = my_handle->get_item(key, value);
         if (error != ESP_OK)
         {
-        	this->setX64(section, key, defaultValue);
-            return defaultValue;
+        	value = defaultValue;
+        	this->setX64(section, key, value);
         }
+        ESP_LOGI(TAG, "getX64, section = %s, key = %s, value = %llX", section, key, value);
     	return value;
     }
 
-    uint32_t getString(const char section[], const char key[], const char* defaultValue, char* captionOut, uint32_t captionSize)
+    uint32_t getString(const char section[], const char key[], const char defaultValue[], char captionOut[], size_t size)
     {
         char *captionTemp = nullptr;
-        my_handle->get_string(key, captionTemp, captionSize);
+        esp_err_t error = my_handle->get_string(key, captionTemp, size);
+        if (error != ESP_OK)
+        {
+        	//captionTemp = (char[])defaultValue;
+        	this->setString(section, key, defaultValue);
+        }
         if (captionTemp == nullptr)
         {
             return 0U;
@@ -162,6 +208,7 @@ public :
 
         std::string caption(captionTemp);
         strcpy(captionOut, caption.c_str());
+        ESP_LOGI(TAG, "getString, section = %s, key = %s, value = %s", section, key, captionOut);
         return static_cast<uint32_t>(caption.size());
     }
 
@@ -188,7 +235,11 @@ public :
 
     void setU8(const char section[], const char key[], const uint8_t value)
     {
+        ESP_LOGI(TAG, "setU8, section = %s, key = %s, value = %u", section, key, value);
     	my_handle->set_item(key, value);
+		printf("Committing updates in NVS ... ");
+		esp_err_t err = my_handle->commit();
+		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setU16(const char section[], const char key[], const uint16_t value)
@@ -217,7 +268,11 @@ public :
 
     void setString(const char section[], const char key[], const char value[])
     {
+        ESP_LOGI(TAG, "setString, section = %s, key = %s, value = %s", section, key, value);
     	my_handle->set_string(key, value);
+		printf("Committing updates in NVS ... ");
+		esp_err_t err = my_handle->commit();
+		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
 
@@ -228,40 +283,6 @@ public :
 void Settings_init(void)
 {
 	s_settings.init();
-}
-
-uint32_t GetPrivateProfileStringA(
-    const char* section,
-    const char* lpKeyName,
-    const char* lpDefault,
-    char* lpReturnedString,
-    uint32_t nSize,
-    const char* lpFileName )
-{
-    (void)lpFileName;
-    return s_settings.getString(section, lpKeyName, lpDefault, lpReturnedString, nSize);
-}
-
-bool WritePrivateProfileStringA(
-    const char* section,
-    const char* lpKeyName,
-    const char* lpString,
-    const char* lpFileName
-    )
-{
-    s_settings.setString(section, lpKeyName, lpString);
-    (void)lpFileName;
-    return true;
-}
-
-uint32_t GetPrivateProfileSectionA(
-    const char* section,
-    char* lpReturnedString,
-    uint32_t nSize,
-    const char* lpFileName
-    )
-{
-    return 0;
 }
 
 /* ************************************************************************ */
@@ -313,17 +334,7 @@ uint64_t getX64(const char section[], const char key[], const uint64_t defaultVa
 
 void getString(const char section[], const char key[], const char defaultValue[], char caption[], size_t size)
 {
-   static char buffer[MAXSTRLEN];
-   uint32_t charCount = GetPrivateProfileStringA(section, key, NULL, buffer, sizeof(buffer), FILENAME);
-   if (charCount == 0U)
-   {
-      WritePrivateProfileStringA(section, key, defaultValue, FILENAME);
-      strcpy_s(caption, defaultValue);
-   }
-   else
-   {
-      strcpy_s(caption, buffer);
-   }
+	s_settings.getString(section, key, defaultValue, caption, size);
 }
 
 void setS8(const char section[], const char key[], const int8_t value)
