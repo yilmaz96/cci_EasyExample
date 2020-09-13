@@ -42,6 +42,8 @@ extern "C" {
     size_t getSection(const char section[], char string[], size_t stringSize);
     void   clearSection(const char section[]);
 
+    void Settings_init(void);
+
 /* ************************************************************************ */
 #ifdef __cplusplus
 } /* extern "C" { */
