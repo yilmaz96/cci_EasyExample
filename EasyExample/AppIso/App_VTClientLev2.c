@@ -18,8 +18,12 @@
 
 #ifdef _LAY6_  /* compile only if VT client is enabled */
 
+
+#include "VIEngine.h"
+#include "VIEngine.h"
 #include "App_VTClientLev2.h"   // -> Object defines
 
+#include "MyProject1.iop.h"
 
 void VTC_setNewVT(iso_u8 u8Instance)
 {
@@ -65,45 +69,68 @@ void VTC_setPoolManipulation(iso_u8 u8Instance)
 	}
 }
 
-void VTC_handleSoftkeys(const ISOVT_MSG_STA_T * pIsoMsgSta)
+
+iso_u32 Tageszaehler = 0;
+iso_u32 Gesamtzaehler = 0;
+iso_u32 Hugo = 0;
+
+void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pButtonData)
 {
-   switch (pIsoMsgSta->wObjectID)
-   {
-   case KEY_NEXTPAGE:   // soft key F5 (book)
-      if (pIsoMsgSta->lValue == 1)
-      {
-         if (IsoVtcGetStatusInfo(pIsoMsgSta->u8Instance, ID_VISIBLE_DATA_MASK) == DM_PAGE1)
-         {
-            IsoVtcCmd_ActiveMask(pIsoMsgSta->u8Instance, WS_OBJECT, DM_PAGE2);  // next page with parent ID
-         }
-         else if (IsoVtcGetStatusInfo(pIsoMsgSta->u8Instance, ID_VISIBLE_DATA_MASK) == DM_PAGE2)
-         {
-            IsoVtcCmd_ActiveMask(pIsoMsgSta->u8Instance, WS_OBJECT, DM_PAGE3);  // next page with parent ID
-         }
-         else { /* unused */ }
-      }
-      break;
-   // ------------------------------------------------------------------------------
-   case KEY_RESETCNT:    // soft key F2
 
-      break;
-   case KEY_CNT:    // soft key F3
+	// what button was released
+	switch (pButtonData->objectIdOfButtonObject) {
 
-      break;
-   case KEY_F1:    // soft key F1
 
-      break;
-   // ------------------------------------------------------------------------------
-   default:
-      break;
-   }
+	case SoftKey_PlusPlus:
+	case Button_PlusPlus:
+		Tageszaehler++;
+		Gesamtzaehler++;
+		break;
+
+
+	case SoftKey_Reset_Gesamtzaehler:
+	case Button_Reset_Gesamtzaehler:
+		Gesamtzaehler = 0;
+		break;
+
+
+	case SoftKey_Reset_Tageszaehler:
+	case Button_Reset_Tageszaehler:
+		Tageszaehler= 0;
+		break;
+
+
+	default:
+		break;
+	}
+	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
+	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
+
 }
 
 
-void VTC_setPage2( void )
-{
 
+
+void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData)
+{
+	switch (pButtonData->keyActivationCode)
+	{
+	case BUTTON_STATE_RELEASED:
+		VTC_handleSoftkeysAndButtons_RELEASED(pButtonData);
+		break;
+	case BUTTON_STATE_PRESSED:
+		//BUTTON_InputSignalCallback_PRESSED(pButtonData);
+		break;
+	case BUTTON_STATE_HELD:
+		//BUTTON_InputSignalCallback_HELD(pButtonData);
+		break;
+	case BUTTON_STATE_ABORTED:
+		//BUTTON_InputSignalCallback_ABORTED(pButtonData);
+		break;
+	}
 }
+
+
 
 /* ************************************************************************ */
 #endif /* _LAY6_ */
