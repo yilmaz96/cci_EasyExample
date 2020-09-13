@@ -15,6 +15,7 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "nvs.h"
+#include "nvs_handle.hpp"
 
 #if 1
 #define vswprintf_s swprintf
@@ -33,7 +34,7 @@ static const char FILENAME[] = ".\\settings.ini";
 static class Settings 
 {
 private:
-	nvs_handle_t my_handle;
+	std::shared_ptr<nvs::NVSHandle> my_handle;
 public :
     Settings()
     {
@@ -54,9 +55,10 @@ public :
 		// Open
 		printf("\n");
 		printf("Opening Non-Volatile Storage (NVS) handle... ");
-		err = nvs_open("storage", NVS_READWRITE, &my_handle);
-		if (err != ESP_OK) {
-			printf("Error (%s) opening NVS handle!\n", esp_err_to_name(err));
+		esp_err_t result;
+		my_handle = nvs::open_nvs_handle("storage", NVS_READWRITE, &result);
+		if (result != ESP_OK) {
+			printf("Error (%s) opening NVS handle!\n", esp_err_to_name(result));
 		} else {
 			printf("Done\n");
 		}
@@ -66,17 +68,81 @@ public :
     ~Settings()
     {
         // Close
-        nvs_close(my_handle);
     }
 
-    void setString(const char* section, const char* key, const char* value)
+
+    int8_t getS8(const char section[], const char key[], const int8_t defaultValue)
     {
-
+    	int8_t value;
+    	my_handle->get_item(key, value);
+    	return value;
     }
 
-    uint32_t getString(const char* section, const char* key, const char* defaultValue, char* captionOut, uint32_t captionSize)
+    int16_t getS16(const char section[], const char key[], const int16_t defaultValue)
+    {
+    	int16_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    int32_t getS32(const char section[], const char key[], const int32_t defaultValue)
+    {
+    	int32_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    int64_t getS64(const char section[], const char key[], const int64_t defaultValue)
+    {
+    	int64_t value;
+    	esp_err_t error = my_handle->get_item(key, value);
+        if (error != ESP_OK)
+        {
+        	my_handle->set_item(key, defaultValue);
+            return defaultValue;
+        }
+    	return value;
+    }
+
+    uint8_t getU8(const char section[], const char key[], const uint8_t defaultValue)
+    {
+    	uint8_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    uint16_t getU16(const char section[], const char key[], const uint16_t defaultValue)
+    {
+    	uint16_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    uint32_t getU32(const char section[], const char key[], const uint32_t defaultValue)
+    {
+    	uint32_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    uint64_t getU64(const char section[], const char key[], const uint64_t defaultValue)
+    {
+    	uint64_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    uint64_t getX64(const char section[], const char key[], const uint64_t defaultValue)
+    {
+    	uint64_t value;
+    	my_handle->get_item(key, value);
+    	return value;
+    }
+
+    uint32_t getString(const char section[], const char key[], const char* defaultValue, char* captionOut, uint32_t captionSize)
     {
         char *captionTemp = nullptr;
+        my_handle->get_string(key, captionTemp, captionSize);
         if (captionTemp == nullptr)
         {
             return 0U;
@@ -87,11 +153,55 @@ public :
         return static_cast<uint32_t>(caption.size());
     }
 
-    int64_t getS64(const char* section, const char* key, const int64_t defaultValue)
+
+    void setS8(const char section[], const char key[], const int8_t value)
     {
+    	my_handle->set_item(key, value);
+    }
 
+    void setS16(const char section[], const char key[], const int16_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
 
-        return 0;
+    void setS32(const char section[], const char key[], const int32_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setS64(const char section[], const char key[], const int64_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setU8(const char section[], const char key[], const uint8_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setU16(const char section[], const char key[], const uint16_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setU32(const char section[], const char key[], const uint32_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setU64(const char section[], const char key[], const uint64_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setX64(const char section[], const char key[], const uint64_t value)
+    {
+    	my_handle->set_item(key, value);
+    }
+
+    void setString(const char section[], const char key[], const char value[])
+    {
+    	my_handle->set_string(key, value);
     }
 
 
@@ -101,7 +211,7 @@ public :
 
 void Settings_init(void)
 {
-
+	s_settings.init();
 }
 
 uint32_t GetPrivateProfileStringA(
@@ -142,17 +252,17 @@ uint32_t GetPrivateProfileSectionA(
 
 int8_t getS8(const char section[], const char key[], const int8_t defaultValue)
 {
-   return 0;
+	return s_settings.getS8(section, key, defaultValue);
 }
 
 int16_t getS16(const char section[], const char key[], const int16_t defaultValue)
 {
-	   return 0;
+	return s_settings.getS16(section, key, defaultValue);
 }
 
 int32_t getS32(const char section[], const char key[], const int32_t defaultValue)
 {
-	   return 0;
+	return s_settings.getS32(section, key, defaultValue);
 }
 
 int64_t getS64(const char section[], const char key[], const int64_t defaultValue)
@@ -162,27 +272,27 @@ int64_t getS64(const char section[], const char key[], const int64_t defaultValu
 
 uint8_t getU8(const char section[], const char key[], const uint8_t defaultValue)
 {
-	   return 0;
+	return s_settings.getU8(section, key, defaultValue);
 }
 
 uint16_t getU16(const char section[], const char key[], const uint16_t defaultValue)
 {
-	   return 0;
+	return s_settings.getU16(section, key, defaultValue);
 }
 
 uint32_t getU32(const char section[], const char key[], const uint32_t defaultValue)
 {
-	   return 0;
+	return s_settings.getU32(section, key, defaultValue);
 }
 
 uint64_t getU64(const char section[], const char key[], const uint64_t defaultValue)
 {
-	   return 0;
+	return s_settings.getU64(section, key, defaultValue);
 }
 
 uint64_t getX64(const char section[], const char key[], const uint64_t defaultValue)
 {
-	   return 0;
+	return s_settings.getX64(section, key, defaultValue);
 }
 
 void getString(const char section[], const char key[], const char defaultValue[], char caption[], size_t size)
@@ -202,52 +312,52 @@ void getString(const char section[], const char key[], const char defaultValue[]
 
 void setS8(const char section[], const char key[], const int8_t value)
 {
-
+	return s_settings.setS8(section, key, value);
 }
 
 void setS16(const char section[], const char key[], const int16_t value)
 {
-
+	return s_settings.setS16(section, key, value);
 }
 
 void setS32(const char section[], const char key[], const int32_t value)
 {
-
+	return s_settings.setS32(section, key, value);
 }
 
 void setS64(const char section[], const char key[], const int64_t value)
 {
-
+	return s_settings.setS64(section, key, value);
 }
 
 void setU8(const char section[], const char key[], const uint8_t value)
 {
-
+	s_settings.setU8(section, key, value);
 }
 
 void setU16(const char section[], const char key[], const uint16_t value)
 {
-
+	s_settings.setU16(section, key, value);
 }
 
 void setU32(const char section[], const char key[], const uint32_t value)
 {
-
+	s_settings.setU32(section, key, value);
 }
 
 void setU64(const char section[], const char key[], const uint64_t value)
 {
-
+	s_settings.setU64(section, key, value);
 }
 
 void setX64(const char section[], const char key[], const uint64_t value)
 {
-
+	s_settings.setX64(section, key, value);
 }
 
 void setString(const char section[], const char key[], const char value[])
 {
-
+	s_settings.setString(section, key, value);
 }
 
 size_t getSection(const char section[], char string[], size_t stringSize)
@@ -259,7 +369,6 @@ size_t getSection(const char section[], char string[], size_t stringSize)
 void clearSection(const char section[])
 {
    // erase complete section
-
 }
 
 /* ************************************************************************ */
