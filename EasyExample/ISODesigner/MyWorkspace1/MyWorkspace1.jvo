@@ -3,3 +3,14 @@ ptn_Child1=ChildFrames
 [5_5_0.ChildFrames]
 ptn_Child1=Document-0
 ptn_Child2=Document-1
+ptn_Child3=Document-2
+ptn_Child4=Document-3
+[5_5_0.ChildFrames.Document-1]
+ptn_Child1=ViewFrame-0
+[5_5_0.ChildFrames.Document-1.ViewFrame-0]
+DocPathName=.\MyProject1\DataMask_Home.jvi
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPDAAAAAAAJBAAAAAADBCAAAAAOECAAAAA
+ActiveTab=0
+ViewScrollHoriz=102
+ViewScrollVert=0
+IsActiveChildFrame=True
