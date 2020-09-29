@@ -62,6 +62,8 @@ static iso_u8 au8DiagPro[] = { 0u, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xF
 /* CF Functionalities is individual for every CF - No SPNs defined */
 static iso_u8 au8CFFuncImp1[] = { 0xFF, 5,  MINIMUM_CF, 1, 0,  2, 3, 0,  4, 1, 1, 5,  6, 2, 1, 5,  8, 1, 0 };
 
+extern uint32_t  u32SeriNoGet(void);
+
 void AppImpl_Ignition( iso_bool qIgnition )
 {
    if( qIgnition == ISO_TRUE && q_Ignition == ISO_FALSE )
@@ -93,6 +95,7 @@ static void AppImp_Reset( void )
    ISO_USER_PARAM_T  userParamCf = ISO_USER_PARAM_DEFAULT;
    iso_s16           s16CfHandle = HANDLE_UNVALID;
    iso_u8            u8SourceAddress;
+   iso_u32           u32SeriNo = u32SeriNoGet();
    // ------------------------------------------------------------------------------
    iso_NmSetName(ISO_TRUE,      /* Selfconfigurable */
       2u,            /* Industry group */
@@ -100,7 +103,7 @@ static void AppImp_Reset( void )
       0u,            /* Device class instance */
       132u,          /* Function */
       getU16("CF-A", "manufacturer", 0x153u),    /* Manufacturer code; CCI = 0x153 */
-      getU32("CF-A", "serialNo", 0u),            /* Identity number (Serial number) */
+	  u32SeriNo,     /* Identity number (Serial number) */
       0u,            /* Function instance */
       0u,            /* ECU instance */
       &au8CfName);   /* NAME - return value */
