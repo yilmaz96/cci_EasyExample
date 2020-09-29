@@ -217,9 +217,9 @@ static void AppPoolSettings( iso_u8 u8Instance )
 	u16NumberObjects = IsoGetNumofPoolObjs(pu8PoolData, (iso_s32)u32PoolSize);
 
    {  // Set pool information
-      const iso_u8 au8Version1[] = "WHEPS18";          // ISO version string (C-string with termination or 32 bytes; if VT < 5: only 7 Bytes used )
 
-	   (void)IsoVtcPoolInit( u8Instance, au8Version1, pu8PoolData, 0,       // Instance, Version, PoolAddress, ( PoolSize not needed ) 
+
+	   (void)IsoVtcPoolInit( u8Instance, (const iso_u8*) ISO_VERSION_LABEL, pu8PoolData, 0,       // Instance, Version, PoolAddress, ( PoolSize not needed )
 		                   u16NumberObjects, colour_256,     // Number of objects, Graphic typ, 
 						   ISO_DESIGNATOR_WIDTH, ISO_DESIGNATOR_HEIGHT, ISO_MASK_SIZE  );                   // SKM width and height, DM res.
    }
