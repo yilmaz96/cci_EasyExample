@@ -14,24 +14,24 @@
 
 
 /*  identical information across all CF's within a device */
-static const iso_char ecuPartNumber[] = "CCI A3 part number";           /* 11783-12 -- A.1 ECU part number */
-static const iso_char ecuSerialNumber[] = "0815";                       /* 11783-12 -- A.2 ECU serial number -- unique number */
-static const iso_char ecuLocation[] = "Cabin";                          /* 11783-12 -- A.7 ECU location */
-static const iso_char ecuType[] = "CCI A3";                             /* 11783-12 -- A.8 ECU type */
-static const iso_char ecuManufacturerName[] = "CCI e.V.";               /* 11783-12 -- A.5 manufactuer name*/
+static const iso_char ecuPartNumber[] = "C008";           				/* 11783-12 -- A.1 ECU part number */
+static iso_char ecuSerialNumber[] = "123456789+23456789+23456789+";		/* 11783-12 -- A.2 ECU serial number -- unique number */
+static const iso_char ecuLocation[] = "M5Stack ATOM";                   /* 11783-12 -- A.7 ECU location */
+static const iso_char ecuType[] = "ESP32";                              /* 11783-12 -- A.8 ECU type */
+static const iso_char ecuManufacturerName[] = "Meisterschulen am Ostbahnhof, Muenchen"; /* 11783-12 -- A.5 manufactuer name*/
 static const iso_char ecuHardwareVersionId[] = "000209#A3 v.0.9";       /* 11783-12 -- A.21 ECU hardware version identification;
                                                                                    209 is assigned through AEF database 
                                                                                    A3 v.0.9 is optional additional information */
 
-static const iso_char swId1[] = "AUX v0.1 20180217";                    /* 11783-12 -- A.4 software identification */
-static const iso_char swId2[] = "IsobusDriver v09.01.br03";
+static const iso_char swId1[] = "App v0.1 L2021";                    /* 11783-12 -- A.4 software identification */
+static const iso_char swId2[] = "IsobusDriver v11.00.00";
 
-static const iso_char productIdentCode[] = "CCI A3 part number#0815";   /* 11783-7  -- A.22 Product Identification Code
+static const iso_char productIdentCode[] = "part number#C008";   /* 11783-7  -- A.22 Product Identification Code
                                                                                    1st ecuPartNumber
                                                                                    2nd ecuSerialNumber
                                                                                    from ECU Identification */
-static const iso_char productIdentBrand[] = "CCI";                      /* 11783-7  -- A.23 Product Identification Brand */
-static const iso_char productIdentModel[] = "CCI A3";                   /* 11783-7  -- A.24 Product Identification Model */
+static const iso_char productIdentBrand[] = "Landmaschinenmechanik";                      /* 11783-7  -- A.23 Product Identification Brand */
+static const iso_char productIdentModel[] = "M5Stack ATOM";                   /* 11783-7  -- A.24 Product Identification Model */
 
 
 
@@ -55,6 +55,8 @@ static iso_u8* getComplianceCertificate(iso_u16* length);
 /* the following functions return default values */
 static iso_u8* getNoneActiveFaults(iso_u16* length);
 static iso_u8* getNoneAdditionalDiagnostics(iso_u16* length);
+
+extern void Serial_Number_VariableGet(char * c_Serial_Number_Variable);
 
 iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo)
 {
@@ -214,7 +216,7 @@ iso_u8* getECUIdentification(iso_u16* length)
 /*  ECU identification information */
 /*  11783-12 B.1 ECU identification information */
 /*  identical across all CF's within a device */
-
+	Serial_Number_VariableGet(ecuSerialNumber);
     static char ecuIdent[sizeof(ecuPartNumber) + 
                          sizeof(ecuSerialNumber) + 
                          sizeof(ecuLocation) + 
