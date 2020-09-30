@@ -10,7 +10,7 @@
 
 #define MINIMUM_CF  1
 
-#if(0)
+#if(1)
 /*  identical information across all CF's within a device */
 static const iso_char ecuPartNumber[] = "CCI A3 part number";           /* 11783-12 -- A.1 ECU part number */
 static const iso_char ecuSerialNumber[] = "0815";                       /* 11783-12 -- A.2 ECU serial number -- unique number */
@@ -220,7 +220,7 @@ iso_u8* getECUIdentification(iso_u16* length)
 /*  ECU identification information */
 /*  11783-12 B.1 ECU identification information */
 /*  identical across all CF's within a device */
-#if(0)
+#if(1)
     static char ecuIdent[sizeof(ecuPartNumber) + 
                          sizeof(ecuSerialNumber) + 
                          sizeof(ecuLocation) + 
@@ -248,7 +248,7 @@ iso_u8* getSoftwareIdentification(iso_u16* length)
 /*  first byte is the number of software identification fields */
 /*  11783-12 B.2 Software identification */                  
 /*  identical across all CF's within a device */
-#if(0)
+#if(1)
     const char identCount = '\x02';                          /*  11783-12 -- A.3 number of software identification fileds */
     static char swIdent[sizeof(swId1) + sizeof(swId2) + 2] = {0};
     int tempLength = sprintf(&swIdent[0], "%c%s*%s*", identCount, swId1, swId2);
@@ -271,7 +271,7 @@ iso_u8* getProduxtIdentification(iso_u16* length)
 /* Product Identification Code  A.22 */
 /* Product Identification Brand A.23 */
 /* Product Identification Model A.24 */
-#if(0)
+#if(1)
     static char productIdent[sizeof(productIdentCode) + 
                              sizeof(productIdentBrand) + 
                              sizeof(productIdentModel) + 
