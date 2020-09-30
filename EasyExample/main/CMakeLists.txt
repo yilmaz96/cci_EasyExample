@@ -17,6 +17,7 @@ set(COMPONENT_SRCS
   "../Samples/AddOn/AppIso_Output.c"
   "../Settings/settingsNVS.cpp"
   "../AppCanDriverEsp32/CanDriverEsp32.cpp"
+  "../Diagnostic/AppIso_Diagnostic.c"
   "../AppCanDriverEsp32/SerialNumber.c"
 )
 
@@ -27,6 +28,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
   "../AppIso"
   "../AppCommon"
   "../Settings"
+  "../Diagnostic"
   "../ISODesigner/MyWorkspace1/MyProject1/Output"
 )
 
