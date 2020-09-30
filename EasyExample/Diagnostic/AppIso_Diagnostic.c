@@ -15,7 +15,7 @@
 
 /*  identical information across all CF's within a device */
 static const iso_char ecuPartNumber[] = "C008";           				/* 11783-12 -- A.1 ECU part number */
-static iso_char ecuSerialNumber[] = "123456789+23456789+23456789+";		/* 11783-12 -- A.2 ECU serial number -- unique number */
+static iso_char ecuSerialNumber[] = "123456789+23456789+23456789+";	//28 Digits 	/* 11783-12 -- A.2 ECU serial number -- unique number */
 static const iso_char ecuLocation[] = "M5Stack ATOM";                   /* 11783-12 -- A.7 ECU location */
 static const iso_char ecuType[] = "ESP32";                              /* 11783-12 -- A.8 ECU type */
 static const iso_char ecuManufacturerName[] = "Meisterschulen am Ostbahnhof, Muenchen"; /* 11783-12 -- A.5 manufactuer name*/
@@ -40,7 +40,7 @@ static const iso_u8  complianceTestProtocolRevision = 5;            /* 11783-7  
 static const iso_u8  complianceTestProtocolPublicationYear = 17;    /* 11783-7  -- A.29.1 -- 6 bits */
 static const iso_u8  complianceCertificationLabType = 1;            /* 11783-7  -- A.29.3 -- EU AEF certified lab */
 static const iso_u16 complianceCertificationLabID = 507;            /* 11783-7  -- A.29.4 */
-static const iso_u8  complianceCertificationMessageRevision = 1;    /* 11783-7  -- A.29.19 */
+//static const iso_u8  complianceCertificationMessageRevision = 1;    /* 11783-7  -- A.29.19 */
 static const iso_u16 complianceCertificationReferenceNumber = 5131; /* 11783-7  -- A.29.18 */
 
 /*  the following functions return individual values for CF's within a device */
@@ -293,7 +293,7 @@ iso_u8* getComplianceCertificate(iso_u16* length)
                     ((complianceCertificationLabType & 0x03) << 1) | 
                     ((complianceTestProtocolRevision & 0x04) >> 2);
     au8ComCert[2] = ((complianceCertificationLabID & 0x7F8) >> 3);
-    au8ComCert[5] = ((complianceCertificationMessageRevision & 0x1) << 7);
+    au8ComCert[5] = ((complianceTestProtocolRevision & 0x1) << 7);
     au8ComCert[6] = (complianceCertificationReferenceNumber & 0xFF);
     au8ComCert[7] = ((complianceCertificationReferenceNumber & 0xFF00) >> 8);
 
@@ -305,7 +305,25 @@ iso_u8* getComplianceCertificate(iso_u16* length)
     return au8ComCert;
 }
 
-static iso_u8* getFuncChar(enum CFType cfType, iso_u16* length)
+
+
+#define MINIMUM_CF			0 //Minimum control function
+#define UT_SERVER_CF		1 //Universal terminal (server)
+#define UT_CLIENT_CF		2 //Universal terminal working set (client)
+#define AUX_O_INPUTS_CF		3 //Aux-O inputs
+#define AUX_O_FUNCTIONS_CF	4 //Aux-O functions
+#define AUX_N_INPUTS_CF		5 //Aux-N inputs
+#define AUX_N_FUNCTIONS_CF	6 //Aux-N functions
+#define TC_BAS_SERVER_CF	7 //Task controller basic server
+#define TC_BAS_CLIENT_CF	8 //Task controller basic client
+#define TC_GEO_SERVER_CF	9 //Task controller geo server
+#define TC_GEO_CLIENT_CF	10 //Task controller geo client
+#define TC_SC_SERVER_CF		11 //Task controller section control server
+#define TC_SC_CLIENT_CF		12 //Task controller section control client
+#define TECU_SERVER_CF		13 //Basic tractor ECU (server)
+#define TECU_CLIENT_CF		14 //Basic tractor ECU implement set (client)
+
+static iso_u8* getFuncChar(iso_u16* length)
 {
 /*  11783-12 B.9 control function characteristics */
 /*  Byte 1: FF */
@@ -319,31 +337,19 @@ static iso_u8* getFuncChar(enum CFType cfType, iso_u16* length)
 /*  Byte n+2: 2nd functionality, A.12 number of option bytes */
 /*  ...       2nd functionality, A.13 option bytes */
 /* ... */
-    static iso_u8 au8FuncCharAuxN[] = { 0xFF,  
-                                        2,  
-                                        MINIMUM_CF, 1, 0, /* this is typically always the first entry */
-                                        6, 2, 0, 0};      /* AUX-N, no optional functions */
-
-    iso_u8* ident = 0;
-    iso_u16 tempLength = 0;
-
-    switch(cfType)
-    {
-    case CFTypeIsAuxN:
-        ident = au8FuncCharAuxN;
-        tempLength = sizeof(au8FuncCharAuxN);
-        break;
-
-    default:
-        break;
-    }
+    static iso_u8 au8FuncCha[] = { 0xFF,
+                                        3,  				//Number of Functionalities
+										MINIMUM_CF, 		1, 0, 		/* MINIMUM CF this is typically always the first entry */
+										UT_CLIENT_CF, 		2, 0,       /* VT-Client, no optional functions */
+										TECU_CLIENT_CF, 	1, 0,		/* TECU */
+										0};
 
     if (length != 0)
     {
-        *length = tempLength;
+        *length = sizeof(au8FuncCha);
     }
 
-    return ident;
+    return au8FuncCha;
 }
 
 static iso_u8* getNoneActiveFaults(iso_u16* length)
