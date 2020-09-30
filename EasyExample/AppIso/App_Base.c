@@ -53,8 +53,8 @@ static void  App_SetDTCforAddressViolation(iso_u8 u8SA);
 iso_bool AppImpl_Diag(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo);
 
 /* Following diagnostic data are normally the same for all CFs */
-static iso_u8 au8ECUIdent[] = "WHEPS TESTIMPLEMENT*0815*PC*VIVOBOOK*WHEPS*423*";
-static iso_u8 au8SWIdent[] = "xApp 11.0#ISOBUSDriver 11.00.00*";
+static iso_u8 au8ECUIdent[] = "WHEPS TESTIMPLEMENT*0815*M5-ATOM*ESP32*WHEPS*423*";
+static iso_u8 au8SWIdent[] = "\x02App 11.0#ISOBUSDriver 11.00.00*";
 static iso_u8 au8ProdIden[] = "ABC1234567890*Brand A*2020i*";
 static iso_u8 au8ComCert[8] = { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u };                       // Byte 3 and 4 has to be 0 !
 static iso_u8 au8DiagPro[] = { 0u, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu };  // No SPN defined !
