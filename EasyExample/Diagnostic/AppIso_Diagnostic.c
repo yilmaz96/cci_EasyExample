@@ -7,10 +7,12 @@
 #include "IsoBaseApi.h"
 #include "IsoMnApi.h"
 #include "AppIso_Diagnostic.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MINIMUM_CF  1
 
-#if(1)
+
 /*  identical information across all CF's within a device */
 static const iso_char ecuPartNumber[] = "CCI A3 part number";           /* 11783-12 -- A.1 ECU part number */
 static const iso_char ecuSerialNumber[] = "0815";                       /* 11783-12 -- A.2 ECU serial number -- unique number */
@@ -30,16 +32,8 @@ static const iso_char productIdentCode[] = "CCI A3 part number#0815";   /* 11783
                                                                                    from ECU Identification */
 static const iso_char productIdentBrand[] = "CCI";                      /* 11783-7  -- A.23 Product Identification Brand */
 static const iso_char productIdentModel[] = "CCI A3";                   /* 11783-7  -- A.24 Product Identification Model */
-#endif
-/* the following information can either be compiled based on the above information or used directly.
-   Both versions are displayed below (see statement "#if(0)").
-*/
-static const iso_char ecuIdent[] = "CCI A3 part number*0815*Cabin*CCI A3*CCI e.V.*000209#A3 v.0.9*";
-static const iso_char swIdent[] = "\x02AUX v0.1 20180217*IsobusDriver v09.01.br03*";
-static const iso_char productIdent[] = "CCI A3 part number#0815*CCI*CCI A3*";
-#if(0)
-static const iso_u8 functionality[] = { 0xFF,    2,  MINIMUM_CF, 1, 0,   6, 2, 0, 0}; // graphical AUX-N (A3) 
-#endif
+
+
 
 // The following information is provided by  certification request from certification lab (from AEF database)
 static const iso_u8  complianceTestProtocolRevision = 5;            /* 11783-7  -- A.29.2 -- 5 bits */
@@ -92,7 +86,7 @@ iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo)
             ident = getNoneAdditionalDiagnostics(&identSize);
             break;
 
-#if (0) /* Functionalities are CF specific
+        /* Functionalities are CF specific
          * identify by psMsgInfo->s16HndIntern and use here;
          * or e.g. handle using iso_AlPgnTxNew()
          */
@@ -100,7 +94,7 @@ iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo)
             /* Functionality message */
             ident = getFuncChar(CFTypeIsInvalid, &identSize);
             break;
-#endif
+
         case PGN_ISOBUS_COMPLIANCE_CERTIFICA:
             /* ISOBus compliance cerfification */
             ident = getComplianceCertificate(&identSize);
@@ -220,7 +214,7 @@ iso_u8* getECUIdentification(iso_u16* length)
 /*  ECU identification information */
 /*  11783-12 B.1 ECU identification information */
 /*  identical across all CF's within a device */
-#if(1)
+
     static char ecuIdent[sizeof(ecuPartNumber) + 
                          sizeof(ecuSerialNumber) + 
                          sizeof(ecuLocation) + 
@@ -231,9 +225,6 @@ iso_u8* getECUIdentification(iso_u16* length)
     int tempLength = sprintf(&ecuIdent[0], "%s*%s*%s*%s*%s*%s*", 
                              ecuPartNumber, ecuSerialNumber, ecuLocation,
                              ecuType, ecuManufacturerName, ecuHardwareVersionId);
-#else
-    int tempLength = sizeof(ecuIdent) - 1;
-#endif
 
     if (length != 0)
     {
@@ -248,13 +239,11 @@ iso_u8* getSoftwareIdentification(iso_u16* length)
 /*  first byte is the number of software identification fields */
 /*  11783-12 B.2 Software identification */                  
 /*  identical across all CF's within a device */
-#if(1)
+
     const char identCount = '\x02';                          /*  11783-12 -- A.3 number of software identification fileds */
     static char swIdent[sizeof(swId1) + sizeof(swId2) + 2] = {0};
     int tempLength = sprintf(&swIdent[0], "%c%s*%s*", identCount, swId1, swId2);
-#else
-    int tempLength = sizeof(swIdent) - 1;
-#endif
+
 
     if (length != 0)
     {
@@ -271,7 +260,7 @@ iso_u8* getProduxtIdentification(iso_u16* length)
 /* Product Identification Code  A.22 */
 /* Product Identification Brand A.23 */
 /* Product Identification Model A.24 */
-#if(1)
+
     static char productIdent[sizeof(productIdentCode) + 
                              sizeof(productIdentBrand) + 
                              sizeof(productIdentModel) + 
@@ -279,9 +268,7 @@ iso_u8* getProduxtIdentification(iso_u16* length)
     
     int tempLength = sprintf(&productIdent[0], "%s*%s*%s*", 
                              productIdentCode, productIdentBrand, productIdentModel);
-#else
-    int tempLength = sizeof(productIdent) - 1;
-#endif
+
 
     if (length != 0)
     {
