@@ -93,7 +93,7 @@ static void AppImp_Reset( void )
       5u,            /* Device class */
       0u,            /* Device class instance */
       132u,          /* Function */
-      getU16("CF-A", "manufacturer", 0x153u),    /* Manufacturer code; CCI = 0x153 */
+      1134u,    	 /* Manufacturer code; Master Schools at Ostbahnhof = 1134 */
 	  u32SeriNo,     /* Identity number (Serial number) */
       0u,            /* Function instance */
       0u,            /* ECU instance */
