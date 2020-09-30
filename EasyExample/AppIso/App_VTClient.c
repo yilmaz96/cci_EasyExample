@@ -236,7 +236,6 @@ static void CbVtStatus(const ISOVT_STATUS_DATA_T* psStatusData)
    switch (psStatusData->wPage)
    {
    case DataMask_Home:
-      //IsoDeleteVersion((iso_u8*)"WHEPS18");    // Avoid deleting pool after each test
       break;
 
    default:
