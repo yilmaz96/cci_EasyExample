@@ -29,6 +29,7 @@
 //#include "App_TCClient.h"  /* needed only for DoKeyBoard() */
 
 #include "../Samples/AddOn/AppIso_Output.h"  /* relative to IsoLib */
+#include "AppIso_Diagnostic.h"
 
 
 /* **************************  function declarations  ********************* */
@@ -41,7 +42,7 @@
 void AppHW_Init(void);
 void AppIso_Init(void);
 void AppIso_Cyclic(void);
-iso_bool AppImpl_Diag(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo);
+
 
 static void PrintKeyBoard(void);
 static void DoKeyBoard(void);
@@ -140,7 +141,7 @@ void AppIso_Init(void)
    s16FnRet = iso_BaseInit(CB_GetTimeMs, CB_Watchdog, CB_ReportError, 0, 0);
 #endif /* not defined(ISO_MODULE_CLIENTS) */
    s16Ret = (s16Ret == E_NO_ERR) ? s16FnRet : s16Ret;
-   iso_BaseDiagSetCbForResp(&AppImpl_Diag);
+   iso_BaseDiagSetCbForResp(&processPart12PGN);
 
 #if defined(ISO_MODULE_CLIENTS) /* same as #if defined(_LAY6_) || defined(_LAY10_) || defined(_LAY13_) || ... */
    /* Initialize the ISOBUS driver library clients modules (Hint: LAY14 only in combination with LAY6) */

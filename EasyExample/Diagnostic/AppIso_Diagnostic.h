@@ -17,7 +17,6 @@ extern "C" {
 #endif
 
 iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo);
-void installPart12PGN(enum CFType cfType, iso_s16 nmHandle);
 
 /* ************************************************************************ */
 #ifdef __cplusplus
