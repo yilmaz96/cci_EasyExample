@@ -18,7 +18,7 @@ static iso_char ecuSerialNumber[] = "123456789+23456789+23456789+";	//28 Digits 
 static const iso_char ecuLocation[] = "M5Stack ATOM";                   /* 11783-12 -- A.7 ECU location */
 static const iso_char ecuType[] = "ESP32";                              /* 11783-12 -- A.8 ECU type */
 static const iso_char ecuManufacturerName[] = "Meisterschulen am Ostbahnhof, Muenchen"; /* 11783-12 -- A.5 manufactuer name*/
-static const iso_char ecuHardwareVersionId[] = "000209#A3 v.0.9";       /* 11783-12 -- A.21 ECU hardware version identification;
+static const iso_char ecuHardwareVersionId[] = "000266#A3 v.0.9";       /* 11783-12 -- A.21 ECU hardware version identification;
                                                                                    209 is assigned through AEF database 
                                                                                    A3 v.0.9 is optional additional information */
 
@@ -36,11 +36,11 @@ static const iso_char productIdentModel[] = "M5Stack ATOM";                   /*
 
 // The following information is provided by  certification request from certification lab (from AEF database)
 static const iso_u8  complianceTestProtocolRevision = 5;            /* 11783-7  -- A.29.2 -- 5 bits */
-static const iso_u8  complianceTestProtocolPublicationYear = 17;    /* 11783-7  -- A.29.1 -- 6 bits */
+static const iso_u8  complianceTestProtocolPublicationYear = 20;    /* 11783-7  -- A.29.1 -- 6 bits */
 static const iso_u8  complianceCertificationLabType = 1;            /* 11783-7  -- A.29.3 -- EU AEF certified lab */
 static const iso_u16 complianceCertificationLabID = 507;            /* 11783-7  -- A.29.4 */
 //static const iso_u8  complianceCertificationMessageRevision = 1;    /* 11783-7  -- A.29.19 */
-static const iso_u16 complianceCertificationReferenceNumber = 5131; /* 11783-7  -- A.29.18 */
+static const iso_u16 complianceCertificationReferenceNumber = 5119; /* 11783-7  -- A.29.18 */
 
 /*  the following functions return individual values for CF's within a device */
 static iso_u8* getFuncChar(iso_u16* length);
@@ -128,86 +128,6 @@ iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo)
     }
 
     return bRet;
-}
-
-void installPart12PGN(enum CFType cfType, iso_s16 nmHandle)
-{
-#if defined (_LAY78_) /* Part 7 - Implement messages application layer module is configured */
-   ISO_USER_PARAM_T userParam = ISO_USER_PARAM_DEFAULT;
-    iso_s16 pgnHandle = HANDLE_UNVALID;
-    iso_u16 identSize = 0;
-    iso_u8* ident = 0;
-/* some entries are identical across all CF's within a device. others are unique to a CF */
-
-/*  11783-12 B.8 diagnostic data clear DM3 */
-/* PGN_DIAGNOSTIC_DATA_CLEAR needs to be handled by application! */
-
-    ident = getECUIdentification(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_ECU_IDENTIFICATION_INFO,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    /* ECU software identification */
-    ident = getSoftwareIdentification(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_SOFTWARE_IDENTIFICATION,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    /* Produkt identification message */
-    ident = getProduxtIdentification(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_PRODUCT_IDENTIFICATION,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    /* ECU diagnostic protocol */
-    ident = getNoneAdditionalDiagnostics(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_ECU_DIAGNOSTIC_PROTOCOL,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    /* Functionality message */
-    ident = getFuncChar(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_FUNCTIONALI_CHARACTERISTICS,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    /* ISOBus compliance cerfification */
-    ident = getComplianceCertificate(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_ISOBUS_COMPLIANCE_CERTIFICA,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-/* J1939-73 / 11783-12, B.x - Application layer - Diagnostics */
-
-    // DM1 message 
-    ident = getNoneActiveFaults(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_ACTIVE_DIAG_TROUBLE_CODES,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-
-    // DM2 message 
-    ident = getNoneActiveFaults(&identSize);
-    pgnHandle = iso_AlPgnTxNew(nmHandle,
-        PGN_PREV_ACTIV_DIAG_TROUBLE_COD,
-        ISO_GLOBAL_ADDRESS,
-        identSize, ident, 6, REPRATE_INACTIVE, userParam, 0);
-    iso_AlPgnActivate(pgnHandle);
-#endif /* defined (_LAY78_) */
-
 }
 
 iso_u8* getECUIdentification(iso_u16* length)
