@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MINIMUM_CF  1
 
 
 /*  identical information across all CF's within a device */
@@ -44,7 +43,7 @@ static const iso_u16 complianceCertificationLabID = 507;            /* 11783-7  
 static const iso_u16 complianceCertificationReferenceNumber = 5131; /* 11783-7  -- A.29.18 */
 
 /*  the following functions return individual values for CF's within a device */
-static iso_u8* getFuncChar(enum CFType cfType, iso_u16* length);
+static iso_u8* getFuncChar(iso_u16* length);
 
 /*  the following functions return identical values across all CF's within a device */
 static iso_u8* getECUIdentification(iso_u16* length);
@@ -94,7 +93,7 @@ iso_bool processPart12PGN(ISO_TPREP_E eTpRep, const ISO_TPINFO_T* psMsgInfo)
          */
         case PGN_FUNCTIONALI_CHARACTERISTICS:
             /* Functionality message */
-            ident = getFuncChar(CFTypeIsInvalid, &identSize);
+            ident = getFuncChar(&identSize);
             break;
 
         case PGN_ISOBUS_COMPLIANCE_CERTIFICA:
@@ -175,7 +174,7 @@ void installPart12PGN(enum CFType cfType, iso_s16 nmHandle)
     iso_AlPgnActivate(pgnHandle);
 
     /* Functionality message */
-    ident = getFuncChar(cfType, &identSize);
+    ident = getFuncChar(&identSize);
     pgnHandle = iso_AlPgnTxNew(nmHandle,
         PGN_FUNCTIONALI_CHARACTERISTICS,
         ISO_GLOBAL_ADDRESS,
