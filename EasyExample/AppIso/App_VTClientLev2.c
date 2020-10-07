@@ -187,7 +187,7 @@ void VTC_handleAux(const struct AUX_InputSignalData_T *InputSignalData) {
 
 	pButtonData.objectIdOfButtonObject = CommandTranslate[InputSignalData->objectIdOfAuxObject - FIRST_AUX].objectIdOfButtonObject;
 	pButtonData.wPara2 = (iso_u16)InputSignalData->value1;
-
+	pButtonData.u8Instance = InputSignalData->u8Instance;
 
 	switch (InputSignalData->value1) {
 	case AUX_PRESS_OFF:

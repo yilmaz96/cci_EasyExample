@@ -11,6 +11,7 @@ struct SoftKeyActivation_S
 	iso_u16    objectIdOfVisibleParentDataOrAlarmMask;            /**< Word storage 1 */
 	iso_u16    wPara2;            /**< Word storage 2 */
 	iso_u8     softKeyCode;             /**< Byte storage i. e. soft key number */
+    iso_u8     u8Instance;        /**< \brief Identifier of the client instance */
 };
 
 // BUTTON ACTIVATION (Response == Request)
@@ -42,6 +43,7 @@ struct InputString_S
     iso_u16    wPara1;            /**< Word storage 1 */
     iso_u16    wPara2;            /**< Word storage 2 */
     iso_u8     numberOfBytes;     /**< Byte storage i. e. soft key number */
+    iso_u8     u8Instance;        /**< \brief Identifier of the client instance */
     iso_s16    iErrorCode;        /**< Error iso_u8 of response messages */
     iso_s32    lTimeSt;           /**< Time stamp */
     iso_u8*    newStringValue;    /**< Data of VT e. g. string characters */
@@ -83,7 +85,9 @@ struct AUX_InputSignalData_T
 	iso_u16    inputObjectID;            /**< Word storage 1 */
 	iso_u16    value2;            /**< Word storage 2 */
 	iso_u8     bPara;             /**< Byte storage i. e. soft key number */
+    iso_u8     u8Instance;        /**< \brief Identifier of the client instance */
 	iso_s16    iErrorCode;        /**< Error iso_u8 of response messages */
+
 };
 
 enum VT_line_width
