@@ -263,12 +263,7 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
 
 static bool getKeyByID(iso_u16 wObjID_Fun, char* key, size_t size)
 {
-#if defined(linux)
-    sprintf_s(key, size, "AUX-%d",
-#else // defined(linux)
-    sprintf_s(key, size, "AUX-%d",
-#endif // defined(linux)
-        wObjID_Fun);
+    sprintf_s(key, size, "AUX-%d", wObjID_Fun);
     return true;
 }
 
