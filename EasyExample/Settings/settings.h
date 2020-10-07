@@ -39,8 +39,6 @@ extern "C" {
     void setX64(const char section[], const char key[], const uint64_t value);
     void setString(const char section[], const char key[], const char value[]);
 
-    size_t getSection(const char section[], char string[], size_t stringSize);
-    void   clearSection(const char section[]);
 
     void Settings_init(void);
 

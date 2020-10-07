@@ -415,15 +415,5 @@ void setString(const char section[], const char key[], const char value[])
 	s_settings.setString(section, key, value);
 }
 
-size_t getSection(const char section[], char string[], size_t stringSize)
-{
-   size_t sectionChars = 0;
-   return sectionChars;
-}
-
-void clearSection(const char section[])
-{
-   // erase complete section
-}
 
 /* ************************************************************************ */
