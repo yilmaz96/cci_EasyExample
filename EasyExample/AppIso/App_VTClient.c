@@ -452,7 +452,6 @@ static void CbAuxPrefAssignment(VT_AUXAPP_T asAuxAss[], iso_s16* ps16MaxNumberOf
    VT_AUXAPP_T asPrefAss[20];
 
    /* Reading stored preferred assignment */
-//   s16NumbOfPrefAssigns = IsoAuxReadAssignOfFile(asPrefAss);
    s16NumbOfPrefAssigns = getAuxAssignment("CF-A-AuxAssignment", asPrefAss);
 
    for (s16I = 0; s16I < s16NumbOfPrefAssigns; s16I++)
