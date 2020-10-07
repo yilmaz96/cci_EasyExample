@@ -203,12 +203,12 @@ bool parseAuxEntry(char* entry, VT_AUXAPP_T* auxEntry)
 void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNumberOfAssigns)
 {
 
-	char key[16];
+	char key[64];
    // erase complete section
    for (int8_t idx = FIRST_AUX; idx <= LAST_AUX; idx++)
    {
        getKeyByID(idx, key, sizeof(key));
-       setString(section, key, nullptr);
+       eraseString(section, key);
    }
 
 
@@ -257,7 +257,7 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
         char key[64];
         getKeyByID(sAuxAss->wObjID_Fun, key, sizeof(key));
         iso_DebugPrint("updateAuxAssignment remove: %s\n", key);
-        setString(auxSection, key, nullptr);
+        eraseString(auxSection, key);
     }
 }
 

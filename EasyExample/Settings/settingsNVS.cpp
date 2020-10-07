@@ -303,6 +303,15 @@ public :
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
+    void eraseString(const char section[], const char key[])
+    {
+        ESP_LOGI(TAG, "erase_item, section = %s, key = %s", section, key);
+    	my_handle->erase_item(key);
+		printf("Committing updates in NVS ... ");
+		esp_err_t err = my_handle->commit();
+		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+    }
+
 
 } s_settings;
 
@@ -414,6 +423,11 @@ void setString(const char section[], const char key[], const char value[])
 {
 	s_settings.setString(section, key, value);
 }
+void eraseString(const char section[], const char key[])
+{
+	s_settings.eraseString(section, key);
+}
+
 
 
 /* ************************************************************************ */
