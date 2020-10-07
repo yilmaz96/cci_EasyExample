@@ -198,14 +198,13 @@ public :
         esp_err_t error = my_handle->get_string(key, captionTemp, size);
         if (error != ESP_OK)
         {
-        	//captionTemp = (char[])defaultValue;
+        	captionTemp = (char *)defaultValue;
+            if (captionTemp == nullptr)
+            {
+                return 0U;
+            }
         	this->setString(section, key, defaultValue);
         }
-        if (captionTemp == nullptr)
-        {
-            return 0U;
-        }
-
         std::string caption(captionTemp);
         strcpy(captionOut, caption.c_str());
         ESP_LOGI(TAG, "getString, section = %s, key = %s, value = %s", section, key, captionOut);

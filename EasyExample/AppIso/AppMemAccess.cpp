@@ -146,7 +146,7 @@ int getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 	   char buffer[512];
        char key[64];
        getKeyByID(idx, key, sizeof(key));
-       getString(auxSection, key, "", buffer, sizeof(buffer));
+       getString(auxSection, key, nullptr, buffer, sizeof(buffer));
       VT_AUXAPP_T* auxEntry = &asAuxAss[idxAux];
       if (parseAuxEntry(buffer, auxEntry))
       {
