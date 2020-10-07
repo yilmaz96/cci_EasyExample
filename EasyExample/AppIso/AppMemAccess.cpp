@@ -47,7 +47,7 @@ using namespace std;
 #endif // def ESP_PLATFORM
 
 static bool parseAuxEntry(char* entry, VT_AUXAPP_T* auxEntry);
-static bool getKeyByID(iso_u16 wObjID_Fun, char* key, size_t size);
+static bool getKeyByID(iso_s16 wObjID_Fun, char* key, size_t size);
 static bool getValue(const VT_AUXAPP_T& auxEntry, char* value, size_t size);
 
 extern const int FIRST_AUX;
@@ -138,10 +138,10 @@ iso_u32 LoadPoolFromFile(const char * pcFilename, iso_u8 ** pPoolBuff)
 
 
 /* ****************   Auxiliary Assignments  *********************************** */
-int getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
+iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 {
-   size_t idxAux = 0U;
-   for (int8_t idx = FIRST_AUX; idx <= LAST_AUX; idx++)
+	iso_s16 idxAux = 0U;
+   for (iso_s16 idx = FIRST_AUX; idx <= LAST_AUX; idx++)
    {
 	   char buffer[512];
        char key[64];
@@ -215,10 +215,10 @@ void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNum
    char buffer[512];
 
    // write aux entries
-   for (int8_t idx = 0; idx < iNumberOfAssigns; idx++)
+   for (iso_s16 idx = 0; idx < iNumberOfAssigns; idx++)
    {
       VT_AUXAPP_T* auxEntry = &asAuxAss[idx];
-      getKeyByID(asAuxAss->wObjID_Fun, key, sizeof(key));
+      getKeyByID((iso_s16)asAuxAss->wObjID_Fun, key, sizeof(key));
       uint64_t name = 0;
       memcpy(&name, &auxEntry->baAuxName[0], 8);            /* ISO name of the auxiliary input device. The bytes must be set to 0xFF if not used. */
 #if defined(USE_L_FOR_64BIT)
@@ -240,7 +240,7 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
     {
         char key[64];
         char value[64];
-        getKeyByID(sAuxAss->wObjID_Fun, key, sizeof(key));
+        getKeyByID((iso_s16)sAuxAss->wObjID_Fun, key, sizeof(key));
         getValue(*sAuxAss, value, sizeof(value));
         iso_DebugPrint("updateAuxAssignment add: %s %s\n", key, value);
         setString(auxSection, key, value);
@@ -255,13 +255,13 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
         }
 
         char key[64];
-        getKeyByID(sAuxAss->wObjID_Fun, key, sizeof(key));
+        getKeyByID((iso_s16)sAuxAss->wObjID_Fun, key, sizeof(key));
         iso_DebugPrint("updateAuxAssignment remove: %s\n", key);
         eraseString(auxSection, key);
     }
 }
 
-static bool getKeyByID(iso_u16 wObjID_Fun, char* key, size_t size)
+static bool getKeyByID(iso_s16 wObjID_Fun, char* key, size_t size)
 {
     sprintf_s(key, size, "AUX-%d", wObjID_Fun);
     return true;
