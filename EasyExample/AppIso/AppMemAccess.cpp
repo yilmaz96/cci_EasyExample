@@ -140,12 +140,20 @@ iso_u32 LoadPoolFromFile(const char * pcFilename, iso_u8 ** pPoolBuff)
 /* ****************   Auxiliary Assignments  *********************************** */
 iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 {
+
+#if defined(ESP_PLATFORM)
+       ESP_LOGI(TAG, "getAuxAssignment");
+#endif // def ESP_PLATFORM
+
 	iso_s16 idxAux = 0U;
    for (iso_s16 idx = FIRST_AUX; idx <= LAST_AUX; idx++)
    {
 	   char buffer[512];
        char key[64];
        getKeyByID(idx, key, sizeof(key));
+#if defined(ESP_PLATFORM)
+       ESP_LOGI(TAG, "getKeyByID %s ", key);
+#endif // def ESP_PLATFORM
        getString(auxSection, key, nullptr, buffer, sizeof(buffer));
       VT_AUXAPP_T* auxEntry = &asAuxAss[idxAux];
       if (parseAuxEntry(buffer, auxEntry))

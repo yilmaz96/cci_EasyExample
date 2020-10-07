@@ -15,7 +15,6 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include "nvs_handle.hpp"
 #include "esp_log.h"
 
 
@@ -38,7 +37,7 @@ static const char TAG[] = "settings";
 static class Settings 
 {
 private:
-	std::shared_ptr<nvs::NVSHandle> my_handle;
+	nvs_handle_t my_handle;;
 public :
     Settings()
     {
@@ -59,8 +58,7 @@ public :
 		// Open
 		printf("\n");
 		printf("Opening Non-Volatile Storage (NVS) handle... ");
-		esp_err_t result;
-		my_handle = nvs::open_nvs_handle("storage", NVS_READWRITE, &result);
+		esp_err_t result = nvs_open("storage", NVS_READWRITE, &my_handle);
 		if (result != ESP_OK) {
 			printf("Error (%s) opening NVS handle!\n", esp_err_to_name(result));
 		} else {
@@ -78,7 +76,7 @@ public :
     int8_t getS8(const char section[], const char key[], const int8_t defaultValue)
     {
     	int8_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_i8(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -194,21 +192,19 @@ public :
 
     uint32_t getString(const char section[], const char key[], const char defaultValue[], char captionOut[], size_t size)
     {
-        char *captionTemp = nullptr;
-        esp_err_t error = my_handle->get_string(key, captionTemp, size);
+
+        esp_err_t error = my_handle->get_item(key, captionOut);
+        ESP_LOGI(TAG, "getString, section = %s, key = %s, size = %d, error: %d, %s", section, key, size, error, esp_err_to_name(error));
         if (error != ESP_OK)
         {
-        	captionTemp = (char *)defaultValue;
-            if (captionTemp == nullptr)
+            if (defaultValue == nullptr)
             {
                 return 0U;
             }
         	this->setString(section, key, defaultValue);
         }
-        std::string caption(captionTemp);
-        strcpy(captionOut, caption.c_str());
         ESP_LOGI(TAG, "getString, section = %s, key = %s, value = %s", section, key, captionOut);
-        return static_cast<uint32_t>(caption.size());
+        return (uint32_t)strlen(captionOut);
     }
 
 
