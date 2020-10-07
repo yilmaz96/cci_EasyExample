@@ -448,7 +448,8 @@ iso_s16 VTC_PoolReload(void)
 // Callback function for setting the preferred assignment
 static void CbAuxPrefAssignment(VT_AUXAPP_T asAuxAss[], iso_s16* ps16MaxNumberOfAssigns, ISO_USER_PARAM_T userParam)
 {
-   iso_s16 s16I, s16NumbOfPrefAssigns = 0;
+   iso_s16 s16I;
+   iso_s16 s16NumbOfPrefAssigns = 0;
    VT_AUXAPP_T asPrefAss[20];
 
    /* Reading stored preferred assignment */
