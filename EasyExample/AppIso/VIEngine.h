@@ -75,7 +75,7 @@ enum AUX_PRESS_E {
 
 
 /* AUX input signal activation callback notification struct */
-typedef struct
+struct AUX_InputSignalData_T
 {
 	iso_s16 iVtFunction;       /**< Last function of VT response (#ISOVT_FUNC_e) */
 	iso_u16 objectIdOfAuxObject;
@@ -84,7 +84,7 @@ typedef struct
 	iso_u16    value2;            /**< Word storage 2 */
 	iso_u8     bPara;             /**< Byte storage i. e. soft key number */
 	iso_s16    iErrorCode;        /**< Error iso_u8 of response messages */
-}AUX_InputSignalData_T;
+};
 
 enum VT_line_width
 {

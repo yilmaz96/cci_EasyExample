@@ -372,7 +372,7 @@ static void CbVtMessages( const ISOVT_MSG_STA_T * pIsoMsgSta )
        }
        break;
    case auxiliary_input_status_type_2 :
-      // Here the application gets all Auxfunctions events 
+	   VTC_handleAux((struct AUX_InputSignalData_T *)(pIsoMsgSta));
        break;
    default:
        break;

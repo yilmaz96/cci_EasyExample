@@ -28,6 +28,7 @@ void VTC_setPoolReady(iso_u8 u8Instance);
 void VTC_setPoolManipulation(iso_u8 u8Instance);
 
 void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData);
+void VTC_handleAux(const struct AUX_InputSignalData_T *InputSignalData);
 
 
 //void VTC_process_VT_change_string_value(const ISOVT_MSG_STA_T * pIsoMsgSta);
