@@ -45,11 +45,11 @@ CommandTranslateObject CommandTranslate[] = {
 
 
 //make this Defines (Right side)
-#define FIRST_AUX AuxFunction2_PlusPlus
-#define LAST_AUX AuxFunction2_PlusPlus
+const int FIRST_AUX = AuxFunction2_PlusPlus;
+const int  LAST_AUX = AuxFunction2_PlusPlus;
 //do not Change this.
-#define NUM_AUX_FUNCTIONS ((LAST_AUX-FIRST_AUX)+1)
-iso_s32 InputSignalData_old_value1[NUM_AUX_FUNCTIONS] = {AUX_PRESS_OFF};
+const int  NUM_AUX_FUNCTIONS = ((LAST_AUX-FIRST_AUX)+1);
+iso_s32 InputSignalData_old_value1[20] = {AUX_PRESS_OFF};
 
 
 
