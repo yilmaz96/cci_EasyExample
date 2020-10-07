@@ -136,116 +136,23 @@ iso_u32 LoadPoolFromFile(const char * pcFilename, iso_u8 ** pPoolBuff)
 
 /* ****************   Auxiliary Assignments  *********************************** */
 
-int IsoAuxReadAssignOfFile(VT_AUXAPP_T asAuxAss[])
+int getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 {
-   FILE *pFile;
-   char sAssignment[100];
-   int iCnt = 0;
+   iso_s16 iNumberOfAssigns;
+   char buffer[512];
+   char key[16];
+   // get  s16NumbOfPrefAssigns
+   iNumberOfAssigns = getS16(auxSection, "s16NumbOfPrefAssigns", 0);
 
-   pFile = fopen("AuxAssignOfApp.txt", "rb");
-   if (pFile == NULL)
+   // write aux entries
+   for (int8_t idx = 0; idx < iNumberOfAssigns; idx++)
    {
-      std::cout << "Error opening AuxAssignOfApp.txt (not available or in wrong directory)" << endl;
-      return 0;
-   }
-   else
-   {
-      while ((fgets(sAssignment, 100, pFile) != NULL))
+	  sprintf_s(key, sizeof(key), "AUX-%d", idx);
+      getString(auxSection, key, "", buffer, sizeof(buffer));
+
+      VT_AUXAPP_T* auxEntry = &asAuxAss[idx];
+      if (parseAuxEntry(buffer, auxEntry))
       {
-         int i;
-         string str_Ass(sAssignment);
-
-         for (i = 0; i<8; i++) {
-            (asAuxAss + iCnt)->baAuxName[i] = 0xFFu;
-         }
-
-         string resToken;
-         int curFld = 0;
-         std::size_t PosStart = 0, PosEnd = 0;
-
-         while (curFld <= 5)
-         {
-            //TRACE("Resulting token: %s\n", resToken);
-            PosStart = str_Ass.find_first_of("0123456789abcdef", PosStart);
-            PosEnd = str_Ass.find_first_of(" ,;", PosStart);
-            if ((PosStart == string::npos) || (PosEnd == string::npos)) break;   // npos
-            resToken = str_Ass.substr(PosStart, PosEnd - PosStart);
-            switch (curFld)
-            {
-            case 0:
-               asAuxAss[iCnt].wManuCode = static_cast<iso_u16>(atoi(resToken.c_str()));
-               break;
-            case 1:
-               asAuxAss[iCnt].wModelIdentCode = static_cast<iso_u16>(atoi(resToken.c_str()));
-               break;
-            case 2:
-               asAuxAss[iCnt].eAuxType = static_cast<VTAUXTYP_e>(atoi(resToken.c_str()));
-               break;
-            case 3:
-               asAuxAss[iCnt].wObjID_Fun = static_cast<iso_u16>(atoi(resToken.c_str()));
-               break;
-            case 4:
-               asAuxAss[iCnt].wObjID_Input = static_cast<iso_u16>(atoi(resToken.c_str()));
-               break;
-            case 5:
-               for (int ii = 0; ii < 8; ii++)
-               {
-                  char    *stopstring;
-                  string strByte = resToken.substr(ii * 2, 2);
-                  asAuxAss[iCnt].baAuxName[ii] = (iso_u8)strtol(strByte.c_str(), &stopstring, 16);
-               }
-               break;
-            default:
-               break;
-            }
-
-            curFld++;
-            PosStart = PosEnd;
-         };
-         iCnt++;
-      };
-      fclose(pFile);
-
-   }
-   return iCnt;
-}
-
-
-int IsoAuxWriteAssignToFile(VT_AUXAPP_T asAuxAss[], iso_s16 iNumberOfAssigns)
-{
-   FILE *pFile;
-   pFile = fopen("AuxAssignOfApp.txt", "wb");
-   if (pFile == nullptr)
-   {
-      std::cout << "Error writing AuxAssignOfApp.txt " << endl;
-   }
-   else
-   {
-      for (iso_s16 iI = 0; iI < iNumberOfAssigns; iI++)
-      {
-         std::string strLine, strName;
-         stringstream ss;
-         for (iso_s16 iII = 0; iII < 8; iII++)
-         {
-            char cstr[4];
-            sprintf(cstr, "%02x", asAuxAss[iI].baAuxName[iII]);
-            strName.append((string)cstr);
-         }
-         ss << "  " << asAuxAss[iI].wManuCode << "   ";
-         ss << asAuxAss[iI].wModelIdentCode << "   ";
-         ss << asAuxAss[iI].eAuxType << "   ";
-         ss << asAuxAss[iI].wObjID_Fun << "   ";
-         ss << asAuxAss[iI].wObjID_Input << "   ";
-         strLine.append(ss.str());
-         strLine.append(strName);
-         strLine.append("\r\n");
-
-         fputs(strLine.c_str(), pFile);
-      }
-      fclose(pFile);
-   }
-   return 0;
-}
 
 
 int getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
