@@ -148,8 +148,8 @@ iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 	iso_s16 idxAux = 0U;
    for (iso_s16 idx = FIRST_AUX; idx <= LAST_AUX; idx++)
    {
-	   char buffer[512];
-       char key[64];
+	   char buffer[64];
+       char key[16];
        getKeyByID(idx, key, sizeof(key));
 #if defined(ESP_PLATFORM)
        ESP_LOGI(TAG, "getKeyByID %s ", key);
@@ -220,7 +220,7 @@ void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNum
    }
 
 
-   char buffer[512];
+   char buffer[64];
 
    // write aux entries
    for (iso_s16 idx = 0; idx < iNumberOfAssigns; idx++)
@@ -246,7 +246,7 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
 {
     if (sAuxAss->wObjID_Input != 0xFFFF)
     {
-        char key[64];
+        char key[16];
         char value[64];
         getKeyByID((iso_s16)sAuxAss->wObjID_Fun, key, sizeof(key));
         getValue(*sAuxAss, value, sizeof(value));
@@ -262,7 +262,7 @@ void updateAuxAssignment(const char auxSection[], VT_AUXAPP_T* sAuxAss)
             sAuxAss->wModelIdentCode = wModelIdentCode;
         }
 
-        char key[64];
+        char key[16];
         getKeyByID((iso_s16)sAuxAss->wObjID_Fun, key, sizeof(key));
         iso_DebugPrint("updateAuxAssignment remove: %s\n", key);
         eraseString(auxSection, key);
