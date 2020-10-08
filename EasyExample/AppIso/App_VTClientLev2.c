@@ -20,11 +20,37 @@
 
 
 #include "VIEngine.h"
-#include "VIEngine.h"
 #include "App_VTClientLev2.h"   // -> Object defines
 
 #include "MyProject1.iop.h"
 #include "Settings/settings.h"
+
+
+//********************************************************************************************
+// Each command has several Unique Features. here they are encapsulated !
+//********************************************************************************************
+typedef struct {
+	//
+	//! The Commandnumber is here redundant, however a Testdriver can check for Validity !!!
+	//
+	iso_u16 objectIdOfAuxObject; // objectIdOfAuxObject
+	iso_u16 objectIdOfButtonObject; // objectIdOfButtonObject
+
+} CommandTranslateObject;
+
+CommandTranslateObject CommandTranslate[] = {
+{ AuxFunction2_PlusPlus,		SoftKey_PlusPlus		} //	0
+
+};
+
+
+//make this Defines (Right side)
+const int FIRST_AUX = AuxFunction2_PlusPlus;
+const int  LAST_AUX = AuxFunction2_PlusPlus;
+//do not Change this.
+const int  NUM_AUX_FUNCTIONS = ((LAST_AUX-FIRST_AUX)+1);
+iso_s32 InputSignalData_old_value1[20] = {AUX_PRESS_OFF};
+
 
 
 // called from AppPoolSettings()
@@ -118,6 +144,9 @@ void VTC_setPoolReady(iso_u8 u8Instance)
 
 
 
+
+
+
 void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData)
 {
 	switch (pButtonData->keyActivationCode)
@@ -135,6 +164,65 @@ void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData)
 		//BUTTON_InputSignalCallback_ABORTED(pButtonData);
 		break;
 	}
+}
+
+void VTC_handleAux(const struct AUX_InputSignalData_T *InputSignalData) {
+	struct ButtonActivation_S pButtonData;
+
+
+	// Application may decide to lookup the object ID of the function assigned to this input
+	// and then check the status data reported...
+	//functionObjID = <maybe you have a lookup to get function object Id from (InputSignalData.inputObjectID)>;
+
+	// Store the sprintf format string in HUGE ROM.
+	//static SprinthfFormatChar_T format[] = "Pressed = %s, Status= %i\n";
+
+
+	if (InputSignalData->objectIdOfAuxObject < FIRST_AUX)
+	{
+		return;
+	}
+
+
+
+	pButtonData.objectIdOfButtonObject = CommandTranslate[InputSignalData->objectIdOfAuxObject - FIRST_AUX].objectIdOfButtonObject;
+	pButtonData.wPara2 = (iso_u16)InputSignalData->value1;
+	pButtonData.u8Instance = InputSignalData->u8Instance;
+
+	switch (InputSignalData->value1) {
+	case AUX_PRESS_OFF:
+		switch (InputSignalData_old_value1[InputSignalData->objectIdOfAuxObject - FIRST_AUX]) {
+		case AUX_PRESS_OFF:
+			//NOOP!
+			break;
+		default:
+			pButtonData.keyActivationCode = BUTTON_STATE_RELEASED;
+			VTC_handleSoftkeysAndButtons(&pButtonData);
+			break;
+		}
+		break;
+	case AUX_PRESS_MOMENTARY:
+		pButtonData.keyActivationCode = BUTTON_STATE_PRESSED;
+		VTC_handleSoftkeysAndButtons(&pButtonData);
+		break;
+	case AUX_PRESS_HELD:
+		switch (InputSignalData_old_value1[InputSignalData->objectIdOfAuxObject - FIRST_AUX]) {
+		case AUX_PRESS_OFF:
+			pButtonData.keyActivationCode = BUTTON_STATE_PRESSED;
+			VTC_handleSoftkeysAndButtons(&pButtonData);
+			break;
+		default:
+			pButtonData.keyActivationCode = BUTTON_STATE_HELD;
+			VTC_handleSoftkeysAndButtons(&pButtonData);
+			break;
+		}
+		break;
+	default:
+		break;
+
+	}
+
+	InputSignalData_old_value1[InputSignalData->objectIdOfAuxObject - FIRST_AUX] = InputSignalData->value1;
 }
 
 

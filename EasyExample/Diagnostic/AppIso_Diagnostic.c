@@ -35,11 +35,10 @@ static const iso_char productIdentModel[] = "M5Stack ATOM";                   /*
 
 
 // The following information is provided by  certification request from certification lab (from AEF database)
-static const iso_u8  complianceTestProtocolRevision = 5;            /* 11783-7  -- A.29.2 -- 5 bits */
+static const iso_u8  complianceTestProtocolRevision = 2;            /* 11783-7  -- A.29.2 -- 5 bits */
 static const iso_u8  complianceTestProtocolPublicationYear = 20;    /* 11783-7  -- A.29.1 -- 6 bits */
 static const iso_u8  complianceCertificationLabType = 1;            /* 11783-7  -- A.29.3 -- EU AEF certified lab */
 static const iso_u16 complianceCertificationLabID = 507;            /* 11783-7  -- A.29.4 */
-//static const iso_u8  complianceCertificationMessageRevision = 1;    /* 11783-7  -- A.29.19 */
 static const iso_u16 complianceCertificationReferenceNumber = 5119; /* 11783-7  -- A.29.18 */
 
 /*  the following functions return individual values for CF's within a device */
@@ -257,9 +256,11 @@ static iso_u8* getFuncChar(iso_u16* length)
 /*  ...       2nd functionality, A.13 option bytes */
 /* ... */
     static iso_u8 au8FuncCha[] = { 0xFF,
-                                        3,  				//Number of Functionalities
+                                        5,  				//Number of Functionalities
 										MINIMUM_CF, 		1, 0, 		/* MINIMUM CF this is typically always the first entry */
 										UT_CLIENT_CF, 		2, 0,       /* VT-Client, no optional functions */
+										AUX_O_FUNCTIONS_CF, 1, 0,   	/* AUX-O function*/
+										AUX_N_FUNCTIONS_CF, 1, 0,   	/* AUX-N function*/
 										TECU_CLIENT_CF, 	1, 0,		/* TECU */
 										0};
 
