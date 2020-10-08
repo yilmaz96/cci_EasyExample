@@ -155,6 +155,7 @@ iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
        ESP_LOGI(TAG, "getKeyByID %s ", key);
 #endif // def ESP_PLATFORM
        getString(auxSection, key, nullptr, buffer, sizeof(buffer));
+       ESP_LOGI(TAG, "getString:  %s", buffer);
       VT_AUXAPP_T* auxEntry = &asAuxAss[idxAux];
       if (parseAuxEntry(buffer, auxEntry))
       {
@@ -166,8 +167,8 @@ iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
           idxAux++;
       }
    }
-
-   return (int)idxAux;
+   ESP_LOGI(TAG, "getAuxAssignment found:  %d", idxAux);
+   return idxAux;
 }
 
 
@@ -230,13 +231,13 @@ void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNum
       uint64_t name = 0;
       memcpy(&name, &auxEntry->baAuxName[0], 8);            /* ISO name of the auxiliary input device. The bytes must be set to 0xFF if not used. */
 #if defined(USE_L_FOR_64BIT)
-      sprintf_s(buffer, sizeof(buffer), "%d,%d,%d,%d,%d,%d,%lX",
+      sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%lX",
 #elif defined(USE_LL_FOR_64BIT)
-      sprintf_s(buffer, sizeof(buffer), "%d,%d,%d,%d,%d,%d,%llX",
+      sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%llX",
 #else // !defined(USE_L_FOR_64BIT)
-      sprintf_s(buffer, sizeof(buffer), "%d,%d,%d,%d,%d,%d,%I64X",
+      sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%I64X",
 #endif //!defined(USE_L_FOR_64BIT)
-         auxEntry->wObjID_Input, auxEntry->eAuxType, auxEntry->wManuCode, auxEntry->wModelIdentCode,
+         auxEntry->wObjID_Fun, auxEntry->wObjID_Input, auxEntry->eAuxType, auxEntry->wManuCode, auxEntry->wModelIdentCode,
          auxEntry->qPrefAssign, auxEntry->bFuncAttribute, name);
       setString(section, key, buffer);
    }
@@ -280,13 +281,13 @@ static bool getValue(const VT_AUXAPP_T& auxEntry, char* value, size_t size)
     uint64_t name = 0;
     memcpy(&name, &auxEntry.baAuxName[0], 8);            /* ISO name of the auxiliary input device. The bytes must be set to 0xFF if not used. */
 #if defined(USE_L_FOR_64BIT)
-    sprintf_s(value, size, "%d,%d,%d,%d,%d,%d,%lX",
+    sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%lX",
 #elif defined(USE_LL_FOR_64BIT)
-    sprintf_s(value, size, "%d,%d,%d,%d,%d,%d,%llX",
+    sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%llX",
 #else // !defined(USE_L_FOR_64BIT)
-    sprintf_s(value, size, "%d,%d,%d,%d,%d,%d,%I64X",
+    sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%I64X",
 #endif // !defined(USE_L_FOR_64BIT)
-        auxEntry.wObjID_Input, auxEntry.eAuxType, auxEntry.wManuCode, auxEntry.wModelIdentCode,
+        auxEntry.wObjID_Fun, auxEntry.wObjID_Input, auxEntry.eAuxType, auxEntry.wManuCode, auxEntry.wModelIdentCode,
         auxEntry.qPrefAssign, auxEntry.bFuncAttribute, name);
     return true;
 }
