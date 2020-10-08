@@ -194,7 +194,6 @@ public :
     {
 
         esp_err_t error = nvs_get_str(my_handle, key, captionOut, &size);
-        ESP_LOGI(TAG, "getString, section = %s, key = %s, size = %d, error: %d, %s", section, key, size, error, esp_err_to_name(error));
         if (error != ESP_OK)
         {
             if (defaultValue == nullptr)
