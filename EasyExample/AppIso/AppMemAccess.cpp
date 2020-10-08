@@ -18,6 +18,12 @@
 #include "esp_log.h"
 #include "esp_spiffs.h"
 
+namespace {
+
+const char *D_D_D_D_D_D_D_LL_X = "%d=%d,%d,%d,%d,%d,%d,%llX";
+
+}
+
 static const char *TAG = "AppMemAccess";
 
 #endif // def ESP_PLATFORM
@@ -186,7 +192,7 @@ bool parseAuxEntry(char* entry, VT_AUXAPP_T* auxEntry)
 #if defined(USE_L_FOR_64BIT)
         "%d=%d,%d,%d,%d,%d,%d,%lX", &wObjID_Fun,
 #elif defined(USE_LL_FOR_64BIT)
-        "%d=%d,%d,%d,%d,%d,%d,%llX", &wObjID_Fun,
+			D_D_D_D_D_D_D_LL_X, &wObjID_Fun,
 #else // !defined(USE_L_FOR_64BIT)
         "%d=%d,%d,%d,%d,%d,%d,%I64X", &wObjID_Fun,
 #endif //!defined(USE_L_FOR_64BIT)
@@ -227,13 +233,13 @@ void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNum
    for (iso_s16 idx = 0; idx < iNumberOfAssigns; idx++)
    {
       VT_AUXAPP_T* auxEntry = &asAuxAss[idx];
-      getKeyByID((iso_s16)asAuxAss->wObjID_Fun, key, sizeof(key));
+      getKeyByID((iso_s16)auxEntry->wObjID_Fun, key, sizeof(key));
       uint64_t name = 0;
       memcpy(&name, &auxEntry->baAuxName[0], 8);            /* ISO name of the auxiliary input device. The bytes must be set to 0xFF if not used. */
 #if defined(USE_L_FOR_64BIT)
       sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%lX",
 #elif defined(USE_LL_FOR_64BIT)
-      sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%llX",
+				sprintf_s(buffer, sizeof(buffer), D_D_D_D_D_D_D_LL_X,
 #else // !defined(USE_L_FOR_64BIT)
       sprintf_s(buffer, sizeof(buffer), "%d=%d,%d,%d,%d,%d,%d,%I64X",
 #endif //!defined(USE_L_FOR_64BIT)
@@ -283,7 +289,7 @@ static bool getValue(const VT_AUXAPP_T& auxEntry, char* value, size_t size)
 #if defined(USE_L_FOR_64BIT)
     sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%lX",
 #elif defined(USE_LL_FOR_64BIT)
-    sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%llX",
+					sprintf_s(value, size, D_D_D_D_D_D_D_LL_X,
 #else // !defined(USE_L_FOR_64BIT)
     sprintf_s(value, size, "%d=%d,%d,%d,%d,%d,%d,%I64X",
 #endif // !defined(USE_L_FOR_64BIT)
