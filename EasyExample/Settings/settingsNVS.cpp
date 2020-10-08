@@ -89,7 +89,7 @@ public :
     int16_t getS16(const char section[], const char key[], const int16_t defaultValue)
     {
     	int16_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_i16(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -102,7 +102,7 @@ public :
     int32_t getS32(const char section[], const char key[], const int32_t defaultValue)
     {
     	int32_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_i32(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -115,7 +115,7 @@ public :
     int64_t getS64(const char section[], const char key[], const int64_t defaultValue)
     {
     	int64_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_i64(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -128,7 +128,7 @@ public :
     uint8_t getU8(const char section[], const char key[], const uint8_t defaultValue)
     {
     	uint8_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_u8(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -141,7 +141,7 @@ public :
     uint16_t getU16(const char section[], const char key[], const uint16_t defaultValue)
     {
     	uint16_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_u16(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -154,7 +154,7 @@ public :
     uint32_t getU32(const char section[], const char key[], const uint32_t defaultValue)
     {
     	uint32_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_u32(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -167,7 +167,7 @@ public :
     uint64_t getU64(const char section[], const char key[], const uint64_t defaultValue)
     {
     	uint64_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_u64(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -180,7 +180,7 @@ public :
     uint64_t getX64(const char section[], const char key[], const uint64_t defaultValue)
     {
     	uint64_t value;
-    	esp_err_t error = my_handle->get_item(key, value);
+    	esp_err_t error = nvs_get_u64(my_handle, key, &value);
         if (error != ESP_OK)
         {
         	value = defaultValue;
@@ -193,7 +193,7 @@ public :
     uint32_t getString(const char section[], const char key[], const char defaultValue[], char captionOut[], size_t size)
     {
 
-        esp_err_t error = my_handle->get_item(key, captionOut);
+        esp_err_t error = nvs_get_str(my_handle, key, captionOut, &size);
         ESP_LOGI(TAG, "getString, section = %s, key = %s, size = %d, error: %d, %s", section, key, size, error, esp_err_to_name(error));
         if (error != ESP_OK)
         {
@@ -211,99 +211,99 @@ public :
     void setS8(const char section[], const char key[], const int8_t value)
     {
         ESP_LOGI(TAG, "setS8, section = %s, key = %s, value = %i", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_i8(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setS16(const char section[], const char key[], const int16_t value)
     {
         ESP_LOGI(TAG, "setS16, section = %s, key = %s, value = %i", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_i16(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setS32(const char section[], const char key[], const int32_t value)
     {
         ESP_LOGI(TAG, "setS32, section = %s, key = %s, value = %i", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_i32(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setS64(const char section[], const char key[], const int64_t value)
     {
         ESP_LOGI(TAG, "setS64, section = %s, key = %s, value = %lli", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_i64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setU8(const char section[], const char key[], const uint8_t value)
     {
         ESP_LOGI(TAG, "setU8, section = %s, key = %s, value = %u", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_u8(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setU16(const char section[], const char key[], const uint16_t value)
     {
         ESP_LOGI(TAG, "setU16, section = %s, key = %s, value = %u", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_u16(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setU32(const char section[], const char key[], const uint32_t value)
     {
         ESP_LOGI(TAG, "setU32, section = %s, key = %s, value = %u", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_u32(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setU64(const char section[], const char key[], const uint64_t value)
     {
         ESP_LOGI(TAG, "setU64, section = %s, key = %s, value = %llu", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_u64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setX64(const char section[], const char key[], const uint64_t value)
     {
         ESP_LOGI(TAG, "setX64, section = %s, key = %s, value = %llX", section, key, value);
-    	my_handle->set_item(key, value);
+        nvs_set_u64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void setString(const char section[], const char key[], const char value[])
     {
         ESP_LOGI(TAG, "setString, section = %s, key = %s, value = %s", section, key, value);
-    	my_handle->set_string(key, value);
+        nvs_set_str(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
     void eraseString(const char section[], const char key[])
     {
         ESP_LOGI(TAG, "erase_item, section = %s, key = %s", section, key);
-    	my_handle->erase_item(key);
+        nvs_erase_key(my_handle, key);
 		printf("Committing updates in NVS ... ");
-		esp_err_t err = my_handle->commit();
+		esp_err_t err = nvs_commit(my_handle);
 		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
     }
 
