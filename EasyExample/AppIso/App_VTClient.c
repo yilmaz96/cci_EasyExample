@@ -29,6 +29,7 @@
 #include "App_VTClientLev2.h"
 
 #include "MyProject1.iop.h"
+#include "MyProject1.c.h"
 
 
 #if defined(linux)
@@ -190,37 +191,17 @@ static void AppVTClientDoProcess( void )
 }
 
 
-#if defined(ESP_PLATFORM)
-static const char *POOL_FILENAME = "/spiffs/pools/MyProject1.iop";
-#else
-static const char *POOL_FILENAME = "pools/MyProject1.iop";
-#endif // defined(ESP_PLATFORM)
-
 
 /* ************************************************************************ */
 static void AppPoolSettings( iso_u8 u8Instance )
 {
-   static iso_u8*  pu8PoolData = 0;        // Pointer to the pool data ( Attention:  )
-   static iso_u32  u32PoolSize = 0UL;
-   static iso_u16  u16NumberObjects;
-   
-	u32PoolSize = LoadPoolFromFile(POOL_FILENAME, &pu8PoolData);
 
-#if defined(linux)
-	if ((u32PoolSize == 0) || (pu8PoolData == 0))
-    {
-        pu8PoolData = (iso_u8*)&pool_iop[0];
-        u32PoolSize = sizeof(pool_iop);
-    }
-#endif // defined(linux)
-
-	u16NumberObjects = IsoGetNumofPoolObjs(pu8PoolData, (iso_s32)u32PoolSize);
 
    {  // Set pool information
 
 
-	   (void)IsoVtcPoolInit( u8Instance, (const iso_u8*) ISO_VERSION_LABEL, pu8PoolData, 0,       // Instance, Version, PoolAddress, ( PoolSize not needed )
-		                   u16NumberObjects, colour_256,     // Number of objects, Graphic typ, 
+	   (void)IsoVtcPoolInit( u8Instance, (const iso_u8*) ISO_VERSION_LABEL, (iso_u8 HUGE_C*)(isoOP_MyProject1 + 1), 0,       // Instance, Version, PoolAddress, ( PoolSize not needed )
+			   ISO_OP_MyProject1_ObjectNumber, colour_256,     // Number of objects, Graphic typ,
 						   ISO_DESIGNATOR_WIDTH, ISO_DESIGNATOR_HEIGHT, ISO_MASK_SIZE  );                   // SKM width and height, DM res.
    }
 
@@ -421,14 +402,9 @@ iso_s16 VTC_PoolDeleteVersion(void)
 iso_s16 VTC_PoolReload(void)
 {
    iso_s16 iRet = E_NO_ERR;
-   /* pointer to the pool data */
-   static iso_u8*  pu8PoolData = 0;
-   static iso_u32  u32PoolSize = 0UL;
-   static iso_u16  u16NumberObjects;
 
-   u32PoolSize = LoadPoolFromFile(POOL_FILENAME, &pu8PoolData);
-   u16NumberObjects = IsoGetNumofPoolObjs(pu8PoolData, (iso_s32)u32PoolSize);
-   if (IsoVtcPoolReload(u8_CfVtInstance, pu8PoolData, u16NumberObjects))
+
+   if (IsoVtcPoolReload(u8_CfVtInstance, (iso_u8 HUGE_C*)(isoOP_MyProject1 + 1),  ISO_OP_MyProject1_ObjectNumber))
    {
       //iso_u16 wSKM_Scal = 0u;
       /* Reload ranges */
