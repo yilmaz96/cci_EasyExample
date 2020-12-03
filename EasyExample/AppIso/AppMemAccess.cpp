@@ -220,7 +220,7 @@ bool parseAuxEntry(char* entry, VT_AUXAPP_T* auxEntry)
 void setAuxAssignment(const char section[], VT_AUXAPP_T asAuxAss[], iso_s16 iNumberOfAssigns)
 {
 
-	char key[64];
+	char key[16];
    // erase complete section
    for (int8_t idx = FIRST_AUX; idx <= LAST_AUX; idx++)
    {
