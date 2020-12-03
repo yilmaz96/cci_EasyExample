@@ -213,7 +213,7 @@ public :
         nvs_set_i8(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setS16(const char section[], const char key[], const int16_t value)
@@ -222,7 +222,7 @@ public :
         nvs_set_i16(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setS32(const char section[], const char key[], const int32_t value)
@@ -231,7 +231,7 @@ public :
         nvs_set_i32(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setS64(const char section[], const char key[], const int64_t value)
@@ -240,7 +240,7 @@ public :
         nvs_set_i64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setU8(const char section[], const char key[], const uint8_t value)
@@ -249,7 +249,7 @@ public :
         nvs_set_u8(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setU16(const char section[], const char key[], const uint16_t value)
@@ -258,7 +258,7 @@ public :
         nvs_set_u16(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setU32(const char section[], const char key[], const uint32_t value)
@@ -267,7 +267,7 @@ public :
         nvs_set_u32(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setU64(const char section[], const char key[], const uint64_t value)
@@ -276,7 +276,7 @@ public :
         nvs_set_u64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setX64(const char section[], const char key[], const uint64_t value)
@@ -285,7 +285,7 @@ public :
         nvs_set_u64(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void setString(const char section[], const char key[], const char value[])
@@ -294,7 +294,7 @@ public :
         nvs_set_str(my_handle, key, value);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
     void eraseString(const char section[], const char key[])
@@ -303,7 +303,7 @@ public :
         nvs_erase_key(my_handle, key);
 		printf("Committing updates in NVS ... ");
 		esp_err_t err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		ESP_LOGI(TAG, "Result: %s, %i, %s ", (err != ESP_OK) ? "Failed!" : "Done", err, esp_err_to_name(err));
     }
 
 
