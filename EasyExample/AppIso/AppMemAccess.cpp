@@ -159,9 +159,11 @@ iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
 #if defined(ESP_PLATFORM)
        ESP_LOGI(TAG, "getKeyByID %s ", key);
 #endif // def ESP_PLATFORM
-       getString(auxSection, key, nullptr, buffer, sizeof(buffer));
+       size_t len = getString(auxSection, key, nullptr, buffer, sizeof(buffer));
        ESP_LOGI(TAG, "getString:  %s", buffer);
       VT_AUXAPP_T* auxEntry = &asAuxAss[idxAux];
+      if(len > 16) //TODO! this is a magic Number now.
+      {
       if (parseAuxEntry(buffer, auxEntry))
       {
 
@@ -170,6 +172,7 @@ iso_s16 getAuxAssignment(const char auxSection[], VT_AUXAPP_T asAuxAss[])
           getValue(*auxEntry, value, sizeof(value));
           iso_DebugPrint("getAuxAssignment: %d %s %s\n", idxAux, key, value);
           idxAux++;
+		  }
       }
    }
    ESP_LOGI(TAG, "getAuxAssignment found:  %d", idxAux);

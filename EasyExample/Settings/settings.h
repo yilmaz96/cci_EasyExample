@@ -26,7 +26,7 @@ extern "C" {
     uint32_t getU32(const char section[], const char key[], const uint32_t defaultValue);
     uint64_t getU64(const char section[], const char key[], const uint64_t defaultValue);
     uint64_t getX64(const char section[], const char key[], const uint64_t defaultValue);
-    void     getString(const char section[], const char key[], const char defaultValue[], char string[], size_t stringSize);
+    size_t   getString(const char section[], const char key[], const char defaultValue[], char string[], size_t stringSize);
 
     void setS8(const char section[], const char key[], const int8_t value);
     void setS16(const char section[], const char key[], const int16_t value);

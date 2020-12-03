@@ -190,7 +190,7 @@ public :
     	return value;
     }
 
-    uint32_t getString(const char section[], const char key[], const char defaultValue[], char captionOut[], size_t size)
+    size_t getString(const char section[], const char key[], const char defaultValue[], char captionOut[], size_t size)
     {
 
         esp_err_t error = nvs_get_str(my_handle, key, captionOut, &size);
@@ -198,12 +198,12 @@ public :
         {
             if (defaultValue == nullptr)
             {
-                return 0U;
+                return (size_t)0U;
             }
         	this->setString(section, key, defaultValue);
         }
         ESP_LOGI(TAG, "getString, section = %s, key = %s, value = %s", section, key, captionOut);
-        return (uint32_t)strlen(captionOut);
+        return strlen(captionOut);
     }
 
 
@@ -363,9 +363,9 @@ uint64_t getX64(const char section[], const char key[], const uint64_t defaultVa
 	return s_settings.getX64(section, key, defaultValue);
 }
 
-void getString(const char section[], const char key[], const char defaultValue[], char caption[], size_t size)
+size_t getString(const char section[], const char key[], const char defaultValue[], char caption[], size_t size)
 {
-	s_settings.getString(section, key, defaultValue, caption, size);
+	return s_settings.getString(section, key, defaultValue, caption, size);
 }
 
 void setS8(const char section[], const char key[], const int8_t value)
