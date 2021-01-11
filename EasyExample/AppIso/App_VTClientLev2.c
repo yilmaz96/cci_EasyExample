@@ -102,7 +102,7 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	case SoftKey_PlusPlus:
 	// Button mit Namen  Button_PlusPlus mit ID 6000 wurde losgelassen.
 	case Button_PlusPlus:
-		Hugo++;
+		Tageszaehler++;
 		Gesamtzaehler++;
 		break;
 
