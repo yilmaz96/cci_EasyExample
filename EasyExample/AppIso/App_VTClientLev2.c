@@ -90,7 +90,7 @@ void VTC_setPoolManipulation(iso_u8 u8Instance)
 
 iso_u32 Tageszaehler = 0;
 iso_u32 Gesamtzaehler = 0;
-iso_u32 Hugo = 0;
+
 
 void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pButtonData) {
 
