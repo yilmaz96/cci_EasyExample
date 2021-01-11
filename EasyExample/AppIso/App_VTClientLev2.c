@@ -106,11 +106,11 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 
 		// diese 3 Zeilen tun absolut das selbe !
 
-		Tageszaehler++;
+		Tageszaehler++; Tageszaehler++; // um 2 erhöhen
 
-		Tageszaehler = Tageszaehler + 1;
+		Tageszaehler = Tageszaehler + 2; // um 2 erhöhen
 
-		Tageszaehler += 1;
+		Tageszaehler += 2; // um 2 erhöhen.
 
 
 
