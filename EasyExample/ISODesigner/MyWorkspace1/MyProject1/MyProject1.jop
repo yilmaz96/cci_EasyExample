@@ -1181,7 +1181,7 @@
 					<Value>0</Value>
 				</Property>
 				<Property Name="AutoAdjustTextarea">
-					<Value>1</Value>
+					<Value>0</Value>
 				</Property>
 				<Property Name="3DStyle">
 					<Value>0</Value>
@@ -1247,7 +1247,7 @@
 					<Value>0</Value>
 				</Property>
 				<Property Name="AutoAdjustTextarea">
-					<Value>1</Value>
+					<Value>0</Value>
 				</Property>
 				<Property Name="3DStyle">
 					<Value>0</Value>
@@ -1405,7 +1405,7 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 			<PropertySheet Name="EditBox">
 				<Property Name="Text">
 					<Value>
-						<![CDATA[YQBiAGMAAAA=]]>
+						<![CDATA[MgAwADIAMAAAAA==]]>
 					</Value>
 				</Property>
 				<Property Name="ResourceID">
@@ -1472,7 +1472,7 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 					<Value>0</Value>
 				</Property>
 				<Property Name="Value">
-					<Value>YQBiAGMAAAA=</Value>
+					<Value>MgAwADIAMAAAAA==</Value>
 				</Property>
 				<Property Name="StringLength">
 					<Value>4</Value>
@@ -2210,6 +2210,11 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 				<Property Name="Locked">
 					<Value>0</Value>
 				</Property>
+				<Property Name="Comment">
+					<Value>
+						<![CDATA[AAA=]]>
+					</Value>
+				</Property>
 				<Property Name="Disabled">
 					<Value>0</Value>
 				</Property>
@@ -2304,6 +2309,11 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 				</Property>
 				<Property Name="Locked">
 					<Value>0</Value>
+				</Property>
+				<Property Name="Comment">
+					<Value>
+						<![CDATA[AAA=]]>
+					</Value>
 				</Property>
 				<Property Name="Disabled">
 					<Value>0</Value>
@@ -2530,7 +2540,7 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 					<Value>(0,0)(154,0)(154,84)(0,84)</Value>
 				</Property>
 				<Property Name="Transform">
-					<Value>(0.7402597402597403)(0.0000000000000000)(0.0000000000000000)(0.0000000000000000)(0.5238095238095238)(0.0000000000000000)</Value>
+					<Value>(0.7402597665786743)(0.0000000000000000)(0.0000000000000000)(0.0000000000000000)(0.5238095521926880)(0.0000000000000000)</Value>
 				</Property>
 				<Property Name="Width">
 					<Value>114</Value>
@@ -3532,6 +3542,9 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 				<Property Name="Name">
 					<Value>Text</Value>
 				</Property>
+				<Property Name="TabIndex">
+					<Value>-1</Value>
+				</Property>
 				<Property Name="Transform">
 					<Value>(1.0000000000000000)(0.0000000000000000)(0.0000000000000000)(0.0000000000000000)(1.0000000000000000)(21.5000000000000000)</Value>
 				</Property>
@@ -3572,6 +3585,9 @@ AHQAYgBhAGgAbgBoAG8AZgAAAA==</Value>
 				</Property>
 				<Property Name="Name">
 					<Value>Text</Value>
+				</Property>
+				<Property Name="TabIndex">
+					<Value>-1</Value>
 				</Property>
 				<Property Name="Transform">
 					<Value>(1.0000000000000000)(0.0000000000000000)(0.0000000000000000)(0.0000000000000000)(1.0000000000000000)(20.0000000000000000)</Value>
