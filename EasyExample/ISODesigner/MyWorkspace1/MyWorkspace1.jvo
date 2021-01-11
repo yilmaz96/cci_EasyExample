@@ -11,7 +11,7 @@ ptn_Child1=ViewFrame-0
 DocPathName=.\MyProject1\DataMask_Home.jvi
 WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPDAAAAAAAOBAAAAAAONEAAAAAPJCAAAAA
 ActiveTab=0
-ViewScrollHoriz=28
+ViewScrollHoriz=0
 ViewScrollVert=0
 IsActiveChildFrame=True
 [5_5_0.ChildFrames.Document-1]
@@ -20,6 +20,6 @@ ptn_Child1=ViewFrame-0
 DocPathName=.\MyProject1\DataMask_1001.jvi
 WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPDAAAAAAAOBAAAAAAONEAAAAAPJCAAAAA
 ActiveTab=0
-ViewScrollHoriz=28
+ViewScrollHoriz=0
 ViewScrollVert=0
 IsActiveChildFrame=False
