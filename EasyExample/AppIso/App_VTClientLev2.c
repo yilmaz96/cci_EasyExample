@@ -97,7 +97,10 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	// what button was released
 	switch (pButtonData->objectIdOfButtonObject) {
 
+
+
 	case SoftKey_PlusPlus:
+	// Button mit Namen  Button_PlusPlus mit ID 6000 wurde losgelassen.
 	case Button_PlusPlus:
 		Tageszaehler++;
 		Gesamtzaehler++;
@@ -118,7 +121,9 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	}
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
+	// Speichern des Tageszaehler; non-volatile; nicht flüchtig; spannungsausfallsicher gespeichert
 	setU32("CF-A", "Tageszaehler", Tageszaehler);
+	// Speichern des Gesamtzaehler; non-volatile; nicht flüchtig; spannungsausfallsicher gespeichert
 	setU32("CF-A", "Gesamtzaehler", Gesamtzaehler);
 }
 
@@ -135,7 +140,11 @@ void VTC_setNewVT(iso_u8 u8Instance)
 
 void VTC_setPoolReady(iso_u8 u8Instance)
 {
+	// Laden aus dem Spannungsausfallsicheren Speicher ins RAM
+	// STANDARD-Wert = 0; wenn nichts abgespeichert.
 	Tageszaehler = getU32("CF-A", "Tageszaehler", 0);
+	// Laden aus dem Spannungsausfallsicheren Speicher ins RAM
+	// STANDARD-Wert = 0; wenn nichts abgespeichert.
 	Gesamtzaehler = getU32("CF-A", "Gesamtzaehler", 0);
 	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
 	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
