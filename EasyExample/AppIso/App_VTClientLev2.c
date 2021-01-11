@@ -107,6 +107,7 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 		// diese 3 Zeilen tun absolut das selbe !
 
 		Tageszaehler++; 					// Inkrement Operator
+											// Tageszaehler ist der Operand
 
 		Tageszaehler = Tageszaehler + 1; 	// Addition; Zuweisung
 											// Gleichheit: ==; Größer >; Größer-gleich >=
