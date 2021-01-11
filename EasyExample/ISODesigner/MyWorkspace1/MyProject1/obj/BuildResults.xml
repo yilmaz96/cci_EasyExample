@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<<<<<<< Updated upstream
 <JVS-ISO-Build BuildTime-Start="12.10.2020 11:31:10" BuildTime-Finished="12.10.2020 11:31:10" Errors="0" Warnings="0">
+=======
+<JVS-ISO-Build BuildTime-Start="05.10.2020 14:25:54" BuildTime-Finished="05.10.2020 14:25:54" Errors="0" Warnings="0">
+>>>>>>> Stashed changes
 	<Errors/>
 	<Warnings/>
 </JVS-ISO-Build>
