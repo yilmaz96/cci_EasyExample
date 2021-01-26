@@ -1,3 +1,9 @@
 [submodule "EasyExample/lib_cci"]
 	path = EasyExample/lib_cci
 	url = https://github.com/Meisterschulen-am-Ostbahnhof-Munchen/cci_ecu_driver_private.git
+[submodule "components/tcp_server"]
+	path = components/tcp_server
+	url = https://github.com/Meisterschulen-am-Ostbahnhof-Munchen/tcp_server.git
+[submodule "components/can2ip"]
+	path = components/can2ip
+	url = https://github.com/Meisterschulen-am-Ostbahnhof-Munchen/can2ip.git
