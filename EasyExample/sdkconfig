@@ -120,6 +120,25 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# can2ip Configuration
+#
+CONFIG_CAN2IP_MODE_ON=y
+# CONFIG_CAN2IP_MODE_OFF is not set
+CONFIG_CAN_MODE_ON=y
+# CONFIG_CAN_MODE_OFF is not set
+CONFIG_CAN_BRIDGE_ON=y
+# CONFIG_CAN_BRIDGE_OFF is not set
+# end of can2ip Configuration
+
+#
+# tcp_server Configuration
+#
+CONFIG_TCP_SERVER_IPV4=y
+# CONFIG_TCP_SERVER_IPV6 is not set
+CONFIG_TCP_SERVER_PORT=43000
+# end of tcp_server Configuration
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEFAULT=y
