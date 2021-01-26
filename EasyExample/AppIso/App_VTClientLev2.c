@@ -90,14 +90,17 @@ void VTC_setPoolManipulation(iso_u8 u8Instance)
 
 iso_u32 Tageszaehler = 0;
 iso_u32 Gesamtzaehler = 0;
-iso_u32 Hugo = 0;
+
 
 void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pButtonData) {
 
 	// what button was released
 	switch (pButtonData->objectIdOfButtonObject) {
 
+
+
 	case SoftKey_PlusPlus:
+	// Button mit Namen  Button_PlusPlus mit ID 6000 wurde losgelassen.
 	case Button_PlusPlus:
 		Tageszaehler++;
 		Gesamtzaehler++;
@@ -116,9 +119,14 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	default:
 		break;
 	}
+	// Senden des Wertes der lokalen Variable Tageszaehler an die NumberVariable_Tageszaehler
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
+	// Senden des Wertes der lokalen Variable Gesamtzaehler an die NumberVariable_Gesamtzaehler
 	IsoVtcCmd_NumericValue(pButtonData->u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
+
+	// Speichern des Tageszaehler; non-volatile; nicht flüchtig; spannungsausfallsicher gespeichert
 	setU32("CF-A", "Tageszaehler", Tageszaehler);
+	// Speichern des Gesamtzaehler; non-volatile; nicht flüchtig; spannungsausfallsicher gespeichert
 	setU32("CF-A", "Gesamtzaehler", Gesamtzaehler);
 }
 
@@ -135,9 +143,20 @@ void VTC_setNewVT(iso_u8 u8Instance)
 
 void VTC_setPoolReady(iso_u8 u8Instance)
 {
+
+	// beim nächsten Anstecken des Gerätes muss der letzte gespeicherte Wert auf das Display gesendet werden.
+
+	// Laden aus dem Spannungsausfallsicheren Speicher ins RAM
+	// STANDARD-Wert = 0; wenn nichts abgespeichert.
 	Tageszaehler = getU32("CF-A", "Tageszaehler", 0);
+	// Laden aus dem Spannungsausfallsicheren Speicher ins RAM
+	// STANDARD-Wert = 0; wenn nichts abgespeichert.
 	Gesamtzaehler = getU32("CF-A", "Gesamtzaehler", 0);
+
+
+	// Senden des Wertes der lokalen Variable Tageszaehler an die NumberVariable_Tageszaehler
 	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Tageszaehler, Tageszaehler);
+	// Senden des Wertes der lokalen Variable Gesamtzaehler an die NumberVariable_Gesamtzaehler
 	IsoVtcCmd_NumericValue(u8Instance, NumberVariable_Gesamtzaehler, Gesamtzaehler);
 }
 

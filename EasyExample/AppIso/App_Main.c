@@ -30,7 +30,7 @@
 
 #include "../Samples/AddOn/AppIso_Output.h"  /* relative to IsoLib */
 #include "AppIso_Diagnostic.h"
-
+#include "sdkconfig.h"
 
 /* **************************  function declarations  ********************* */
 
@@ -46,6 +46,12 @@ void AppIso_Cyclic(void);
 
 static void PrintKeyBoard(void);
 static void DoKeyBoard(void);
+
+
+
+#if(CONFIG_CAN2IP_MODE_ON)
+extern void app_main_tcp_server(void);
+#endif
 
 
 /* **************************  declare private functions ****************** */
@@ -87,7 +93,14 @@ void app_main(void)
 
    /* Initialize ISOBUS library and samples */
    AppIso_Init();
-
+#if(CONFIG_CAN2IP_MODE_ON)
+	//this Server/Client Pair is for CAN2IP only !
+	//do not start it when CAN2IP is off, this would write in a non initialized Queue.
+   hw_DebugPrint("app_main_tcp_server");
+	app_main_tcp_server();
+	hw_DebugPrint("app_main_tcp_server DONE");
+	hw_DebugPrint("app_main_tcp DONE");
+#endif
    /* sample main loop */
    while (hw_PowerSwitchIsOn())
    {
