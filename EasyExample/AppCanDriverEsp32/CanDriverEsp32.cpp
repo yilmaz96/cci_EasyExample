@@ -33,8 +33,8 @@
 
 static void HW_CanMsgPrint(uint8_t canNode_u8, can_message_t* can_msg_ps, uint8_t isRX);
 
-
-#define CANBUS_TAG              "CAN Master"
+#define CANBUS_TAG      "CANBUS Master"
+#define CAN2IP_TAG      "CAN2IP Master"
 #define TX_GPIO_NUM             21
 #define RX_GPIO_NUM             22
 
@@ -44,7 +44,7 @@ static const can_filter_config_t f_config = CAN_FILTER_CONFIG_ACCEPT_ALL();
 static const can_general_config_t g_config = {.mode = CAN_MODE_NORMAL,
                                               .tx_io = (gpio_num_t)TX_GPIO_NUM, .rx_io = (gpio_num_t)RX_GPIO_NUM,
                                               .clkout_io = (gpio_num_t)CAN_IO_UNUSED, .bus_off_io = (gpio_num_t)CAN_IO_UNUSED,
-                                              .tx_queue_len = 150, .rx_queue_len = 120,
+                                              .tx_queue_len = 150, .rx_queue_len = 1000,
                                               .alerts_enabled = CAN_ALERT_NONE,
                                               .clkout_divider = 0};
 
@@ -55,22 +55,39 @@ static const can_general_config_t g_config = {.mode = CAN_MODE_NORMAL,
 void hw_CanInit(uint8_t maxCanNodes_u8)
 {
     //Install CAN driver
+
+#if(CONFIG_CAN_MODE_ON)
     ESP_ERROR_CHECK(can_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(CANBUS_TAG, "Driver installed");
+#endif
+#if(CONFIG_CAN2IP_MODE_ON)
+    ESP_ERROR_CHECK(can2ip_driver_install(&g_config, &t_config, &f_config));
+	ESP_LOGI(CAN2IP_TAG, "Driver installed");
+#endif
 
+#if(CONFIG_CAN_MODE_ON)
     ESP_ERROR_CHECK(can_start());
     ESP_LOGI(CANBUS_TAG, "Driver started");
+#endif
+#if(CONFIG_CAN2IP_MODE_ON)
+    ESP_ERROR_CHECK(can2ip_start());
+	ESP_LOGI(CAN2IP_TAG, "Driver started");
+#endif
 }
 
 void hw_CanClose(void)
 {
+#if(CONFIG_CAN_MODE_ON)
     //Uninstall CAN driver
     ESP_ERROR_CHECK(can_stop());
     ESP_LOGI(CANBUS_TAG, "Driver stopped");
+#endif
 
+#if(CONFIG_CAN_MODE_ON)
     //Uninstall CAN driver
     ESP_ERROR_CHECK(can_driver_uninstall());
     ESP_LOGI(CANBUS_TAG, "Driver uninstalled");
+#endif
 }
 
 
@@ -87,14 +104,35 @@ int16_t hw_CanSendMsg(uint8_t canNode_u8, uint32_t canId_u32, const uint8_t canD
    for (iLoop = 0; (iLoop < 8) && (iLoop < canDataLength_u8); iLoop++)
       can_msg_send.data[iLoop] = canData_au8[iLoop];
 
-   
 
-   
-   if (can_transmit(&can_msg_send, pdMS_TO_TICKS(1)) == ESP_OK)
-   {
+   esp_err_t ok_can    = ESP_OK;
+   esp_err_t ok_can2ip = ESP_OK;
+
+#if(CONFIG_CAN_MODE_ON)
+   ok_can 		= can_transmit(&can_msg_send, 0);
+#endif
+#if(CONFIG_CAN2IP_MODE_ON)
+   ok_can2ip	= can2ip_transmit(&can_msg_send, 0);
+#endif
+
+   //ESP_LOGI(CANBUS_TAG, "can_transmit");
        HW_CanMsgPrint(canNode_u8, &can_msg_send, 0u);
+
+#if(CONFIG_CAN_MODE_ON)
+   if (ok_can != ESP_OK)
+   {
+      ESP_LOGE(CANBUS_TAG, "Tx error: %x %x Error: %i - %s", can_msg_send.identifier, can_msg_send.data[0], ok_can, esp_err_to_name(ok_can));
    }
-   else
+#endif
+#if(CONFIG_CAN2IP_MODE_ON)
+   if (ok_can2ip != ESP_OK)
+   {
+      ESP_LOGE(CAN2IP_TAG, "Tx error: %x %x Error: %i - %s", can_msg_send.identifier, can_msg_send.data[0], ok_can2ip, esp_err_to_name(ok_can2ip));
+   }
+#endif
+
+
+   if (ok_can != ESP_OK && ok_can2ip != ESP_OK)
    {
       ret_16 = -6; /* E_OVERFLOW */
       hw_DebugPrint("Tx error: %x %x \n", can_msg_send.identifier, can_msg_send.data[0]);
@@ -105,13 +143,17 @@ int16_t hw_CanSendMsg(uint8_t canNode_u8, uint32_t canId_u32, const uint8_t canD
 int16_t hw_CanReadMsg(uint8_t canNode_u8, uint32_t *canId_pu32, uint8_t canData_pau8[], uint8_t *canDataLength_pu8)
 {
    can_message_t can_msg_read;
+   esp_err_t err = ESP_FAIL;
 
-
-
-   if (can_receive(&can_msg_read, pdMS_TO_TICKS(1)) == ESP_OK)
+#if(CONFIG_CAN_MODE_ON)
+	err = can_receive(&can_msg_read, 0);
+   if (err == ESP_OK)
    {
       if (can_msg_read.identifier != 0xCCCCCCCCuL)
       {
+#if(CONFIG_CAN_BRIDGE_ON)
+    	  can2ip_transmit(&can_msg_read, 0);
+#endif
          HW_CanMsgPrint(canNode_u8, &can_msg_read, 1u);
          *canId_pu32 = can_msg_read.identifier;
          *canDataLength_pu8 = can_msg_read.data_length_code;
@@ -119,15 +161,56 @@ int16_t hw_CanReadMsg(uint8_t canNode_u8, uint32_t *canId_pu32, uint8_t canData_
          {
             canData_pau8[i_u8] = can_msg_read.data[i_u8];
          }
+         //ESP_LOGI(CANBUS_TAG, "can_receive OK from PHYSICAL CAN");
          return 1;
       }
    }
+#endif
+
+
+#if(CONFIG_CAN2IP_MODE_ON)
+   err = can2ip_receive(&can_msg_read, 0);
+
+  if (err == ESP_OK)
+  {
+
+     if (can_msg_read.identifier != 0xCCCCCCCCuL)
+     {
+#if(CONFIG_CAN_BRIDGE_ON)
+  	   can_transmit(&can_msg_read, 0);
+#endif
+        HW_CanMsgPrint(canNode_u8, &can_msg_read, 1u);
+        *canId_pu32 = can_msg_read.identifier;
+        *canDataLength_pu8 = can_msg_read.data_length_code;
+        for (uint8_t i_u8 = 0u; i_u8 < can_msg_read.data_length_code; i_u8++)
+        {
+           canData_pau8[i_u8] = can_msg_read.data[i_u8];
+        }
+        //ESP_LOGI(CAN2IP_TAG, "can_receive OK from GATEWAY CAN");
+        return 1;
+     }
+  }
+#endif
+   //ESP_LOGI(CANBUS_TAG, "can_receive ERROR");
    return 0;
 }
 
-int16_t  hw_CanGetFreeSendMsgBufferSize(uint8_t canNode_u8)
-{  /* we return always 20 free buffer entries.... */
-   return 20;
+int16_t hw_CanGetFreeSendMsgBufferSize(uint8_t canNode_u8) {
+
+	uint32_t a = 0;
+	uint32_t b = 0;
+
+#if(CONFIG_CAN_MODE_ON)
+	can_status_info_t canstatus_info;
+	can_get_status_info(&canstatus_info);
+	a = g_config.tx_queue_len - canstatus_info.msgs_to_tx;
+#endif
+#if(CONFIG_CAN2IP_MODE_ON)
+	can_status_info_t ipstatus_info;
+	can2ip_get_status_info(&ipstatus_info);
+	b = g_config.tx_queue_len - ipstatus_info.msgs_to_tx;
+#endif
+	return a + b;
 }
 
 static void HW_CanMsgPrint(uint8_t canNode_u8, can_message_t* can_msg_ps, uint8_t isRX)
