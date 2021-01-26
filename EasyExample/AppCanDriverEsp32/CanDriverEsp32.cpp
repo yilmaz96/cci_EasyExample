@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "AppHW.h"
 #include "driver/can.h"
+#include "can2ip_interface.h"
 #include "esp_err.h"
 #include "esp_log.h"
 
