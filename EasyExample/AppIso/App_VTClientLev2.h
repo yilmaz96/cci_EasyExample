@@ -29,13 +29,8 @@ void VTC_setPoolManipulation(iso_u8 u8Instance);
 
 void VTC_handleSoftkeysAndButtons(const struct ButtonActivation_S *pButtonData);
 void VTC_handleAux(const struct AUX_InputSignalData_T *InputSignalData);
+void VTC_handleNumericValues(const struct InputNumber_S * pInputNumberData);
 
-
-//void VTC_process_VT_change_string_value(const ISOVT_MSG_STA_T * pIsoMsgSta);
-//void VTC_process_Auxiliary_input_Type2(const ISOVT_MSG_STA_T * pIsoMsgSta);
-//void VTC_ReadLCofWS(void);
-//void VTC_AuxUnitType1_detected(void);
-//void VTC_Sample_cyclic(void);
 
 /* ************************************************************************ */
 #ifdef __cplusplus

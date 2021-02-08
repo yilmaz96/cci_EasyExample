@@ -17,6 +17,7 @@
 #define Button_PlusPlus                    6000
 #define Button_Reset_Gesamtzaehler         6001
 #define Button_Reset_Tageszaehler          6002
+#define InputNumber_Gesamtzaehler          9000
 #define OutputString_PlusPlus             11000
 #define OutputString_Fasszaehler          11001
 #define OutputString_Reset_Gesamtzaehler  11002

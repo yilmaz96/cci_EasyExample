@@ -329,6 +329,7 @@ static void CbVtMessages( const ISOVT_MSG_STA_T * pIsoMsgSta )
       VTC_handleSoftkeysAndButtons((struct ButtonActivation_S *)(pIsoMsgSta));
       break;
    case VT_change_numeric_value :
+	  VTC_handleNumericValues((struct InputNumber_S *)(pIsoMsgSta));
       break;
    case VT_change_string_value :
       // Receiving string see Page 3

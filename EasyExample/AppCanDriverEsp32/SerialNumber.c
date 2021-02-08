@@ -10,7 +10,7 @@
 #include "esp_log.h"
 #include "esp_system.h"
 
-#define TAG              "SerialNumber"
+static const char *TAG = "SerialNumber";
 
 uint32_t  u32SeriNoGet(void)
 {

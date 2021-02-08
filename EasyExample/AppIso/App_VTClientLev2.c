@@ -25,6 +25,10 @@
 #include "MyProject1.iop.h"
 #include "Settings/settings.h"
 
+#include "esp_log.h"
+
+static const char *TAG = "App_VTClientLev2";
+
 
 //********************************************************************************************
 // Each command has several Unique Features. here they are encapsulated !
@@ -128,6 +132,23 @@ void VTC_handleSoftkeysAndButtons_RELEASED(const struct ButtonActivation_S *pBut
 	setU32("CF-A", "Tageszaehler", Tageszaehler);
 	// Speichern des Gesamtzaehler; non-volatile; nicht flüchtig; spannungsausfallsicher gespeichert
 	setU32("CF-A", "Gesamtzaehler", Gesamtzaehler);
+}
+
+void VTC_handleNumericValues(const struct InputNumber_S * pInputNumberData) {
+	// what number was entered
+	switch (pInputNumberData->objectIdOfInputNumber) {
+
+
+	case NumberVariable_Gesamtzaehler:
+		// Variable mit dem Namen NumberVariable_Gesamtzaehler wurde vom Benutzer am UT Verändert
+		ESP_LOGI(TAG, "you typed: %i", pInputNumberData->newValue); //der eingegebene Wert findet sich in pInputNumberData->newValue
+		Gesamtzaehler = pInputNumberData->newValue;
+		break;
+
+
+	default:
+		break;
+	}
 }
 
 
