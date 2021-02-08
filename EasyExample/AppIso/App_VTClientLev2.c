@@ -141,7 +141,7 @@ void VTC_handleNumericValues(const struct InputNumber_S * pInputNumberData) {
 
 	case NumberVariable_Gesamtzaehler:
 		// Variable mit dem Namen NumberVariable_Gesamtzaehler wurde vom Benutzer am UT Verändert
-		ESP_LOGI(TAG, "you typed: %i", pInputNumberData->newValue); //der eingegebene Wert findet sich in pInputNumberData->newValue
+		ESP_LOGI(TAG, "you typed Gesamtzaehler: %i", pInputNumberData->newValue); //der eingegebene Wert findet sich in pInputNumberData->newValue
 		Gesamtzaehler = pInputNumberData->newValue;
 		break;
 
