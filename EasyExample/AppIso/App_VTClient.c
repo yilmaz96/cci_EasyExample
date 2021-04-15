@@ -29,6 +29,7 @@
 #include "App_VTClientLev2.h"
 
 #include "MyProject1.iop.h"
+#include "MyProject1.c.h"
 
 
 #if defined(linux)

@@ -23,6 +23,8 @@
 #include "App_VTClientLev2.h"   // -> Object defines
 
 #include "MyProject1.iop.h"
+#include "MyProject1.c.h"
+
 #include "Settings/settings.h"
 
 #include "esp_log.h"
